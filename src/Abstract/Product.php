@@ -2,7 +2,7 @@
 
 namespace App\Abstract;
 
-use App\Category;
+use App\Model\Category;
 use PDO;
 use PDOException;
 use DateTime;
