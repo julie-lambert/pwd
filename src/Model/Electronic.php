@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Model;
 
 use App\Abstract\Product;
 use App\Interface\SockableInterface;
