@@ -37,6 +37,7 @@ $allElectronic = $electronic->findAll();
     <?php foreach ($allClothing as $clothing) :
       $clothingImages = $clothing->getPhotos();
       $idProduct = $clothing->getId();
+      var_dump($clothingImages);
     ?>
       <li>
         <a href="product.php?id_product=<?= $idProduct,'&product_type=clothing'?>"><?= $clothing->getName() ?></a>
