@@ -21,7 +21,7 @@ abstract class Product
         protected ?int $quantity = null,
         protected ?DateTime $createdAt = null,
         protected ?DateTime $updatedAt = null,
-        protected ?int $id_category = null
+        protected ?int $category_id = null
     ) {
         // construct here
         // connect to database pdo
@@ -201,21 +201,21 @@ abstract class Product
 
 
     /**
-     * Get the value of id_category
+     * Get the value of category_id
      */
-    public function getId_category()
+    public function getcategory_id()
     {
-        return $this->id_category;
+        return $this->category_id;
     }
 
     /**
-     * Set the value of id_category
+     * Set the value of category_id
      *
      * @return  self
      */
-    public function setId_category($id_category)
+    public function setcategory_id($category_id)
     {
-        $this->id_category = $id_category;
+        $this->category_id = $category_id;
 
         return $this;
     }
@@ -247,7 +247,7 @@ abstract class Product
     {
         $query = $this->pdo->prepare("SELECT * FROM category WHERE id = :id");
         $query->execute([
-            "id" => $this->id_category
+            "id" => $this->category_id
         ]);
         $result = $query->fetch(PDO::FETCH_ASSOC);
         $category = new Category($result['id'], $result['name'], $result['description'], new DateTime($result['createdAt']), new DateTime($result['updatedAt']));
@@ -262,11 +262,11 @@ abstract class Product
     protected function create(): Product|bool
     {
         // vérification qu'on a bien tous les attributs nécessaires
-        if (!$this->name || !$this->photos || !$this->price || !$this->description || !$this->quantity || !$this->id_category) {
+        if (!$this->name || !$this->photos || !$this->price || !$this->description || !$this->quantity || !$this->category_id) {
             return false;
         }
         // insertion dans la bdd
-        $query = $this->pdo->prepare("INSERT INTO product (name, photos, price, description, quantity, createdAt, updatedAt, id_category) VALUES (:name, :photos, :price, :description, :quantity, :createdAt, :updatedAt, :id_category)");
+        $query = $this->pdo->prepare("INSERT INTO product (name, photos, price, description, quantity, createdAt, updatedAt, category_id) VALUES (:name, :photos, :price, :description, :quantity, :createdAt, :updatedAt, :category_id)");
         $query->execute([
             "name" => $this->name,
             "photos" => json_encode($this->photos),
@@ -275,7 +275,7 @@ abstract class Product
             "quantity" => $this->quantity,
             "createdAt" => $this->createdAt->format('Y-m-d H:i:s'),
             "updatedAt" => $this->updatedAt->format('Y-m-d H:i:s'),
-            "id_category" => $this->id_category
+            "category_id" => $this->category_id
         ]);
         // Si la requête a fonctionné, on récupère l'id généré
         if ($query->rowCount() > 0) {
@@ -289,11 +289,11 @@ abstract class Product
     protected function update(): Product|bool
     {
         // vérification qu'on a bien tous les attributs nécessaires
-        if (!$this->id || !$this->name || !$this->photos || !$this->price || !$this->description || !$this->quantity || !$this->id_category) {
+        if (!$this->id || !$this->name || !$this->photos || !$this->price || !$this->description || !$this->quantity || !$this->category_id) {
             return false;
         }
         // insertion dans la bdd
-        $query = $this->pdo->prepare("UPDATE product SET name = :name, photos = :photos, price = :price, description = :description, quantity = :quantity, createdAt = :createdAt, updatedAt = :updatedAt, id_category = :id_category WHERE id = :id");
+        $query = $this->pdo->prepare("UPDATE product SET name = :name, photos = :photos, price = :price, description = :description, quantity = :quantity, createdAt = :createdAt, updatedAt = :updatedAt, category_id = :category_id WHERE id = :id");
         $query->execute([
             "id" => $this->id,
             "name" => $this->name,
@@ -303,7 +303,7 @@ abstract class Product
             "quantity" => $this->quantity,
             "createdAt" => $this->createdAt->format('Y-m-d H:i:s'),
             "updatedAt" => $this->updatedAt->format('Y-m-d H:i:s'),
-            "id_category" => $this->id_category
+            "category_id" => $this->category_id
         ]);
         // Si la requête a fonctionné, on récupère l'id généré
         if ($query) {

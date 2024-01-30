@@ -141,7 +141,7 @@ class Category
     public function getProducts()
     {
         // récupérer les produits de la catégorie
-        $query = $this->pdo->prepare("SELECT * FROM product WHERE id_category = :id");
+        $query = $this->pdo->prepare("SELECT * FROM product WHERE category_id = :id");
         $query->execute([
             "id" => $this->id
         ]);
@@ -155,7 +155,7 @@ class Category
         };
         foreach ($result as $product) {
             //on crée un objet Product
-            $product = new Product($product['id'], $product['name'], json_decode($product['photos']), $product['price'], $product['description'], $product['quantity'], new DateTime($product['createdAt']), new DateTime($product['updatedAt']), $product['id_category']);
+            $product = new Product($product['id'], $product['name'], json_decode($product['photos']), $product['price'], $product['description'], $product['quantity'], new DateTime($product['createdAt']), new DateTime($product['updatedAt']), $product['category_id']);
             //on ajoute l'objet au tableau
             $products[] = $product;
         }

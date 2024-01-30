@@ -2,8 +2,8 @@
 
 require_once 'vendor/autoload.php';
 
-use App\Clothing as Clothing;
-use App\Electronic as Electronic;
+use App\Model\Clothing as Clothing;
+use App\Model\Electronic as Electronic;
 
 
 

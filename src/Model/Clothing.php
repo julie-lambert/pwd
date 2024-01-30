@@ -20,13 +20,13 @@ class Clothing extends Product implements SockableInterface
         protected ?int $quantity = null,
         protected ?DateTime $createdAt = null,
         protected ?DateTime $updatedAt = null,
-        protected ?int $id_category = null,
+        protected ?int $category_id = null,
         protected ?string $size = null,
         protected ?string $color = null,
         protected ?string $type = null,
         protected ?int $material_fee = null
     ) {
-        parent::__construct($id, $name, $photos, $price, $description, $quantity, $createdAt, $updatedAt, $id_category);
+        parent::__construct($id, $name, $photos, $price, $description, $quantity, $createdAt, $updatedAt, $category_id);
     }
 
     /**
@@ -109,7 +109,7 @@ class Clothing extends Product implements SockableInterface
                 $result['quantity'],
                 new DateTime($result['createdAt']),
                 new DateTime($result['updatedAt']),
-                $result['id_category'],
+                $result['category_id'],
                 $result['size'],
                 $result['color'],
                 $result['type'],
@@ -137,7 +137,7 @@ class Clothing extends Product implements SockableInterface
                 $clothing['quantity'],
                 new DateTime($clothing['createdAt']),
                 new DateTime($clothing['updatedAt']),
-                $clothing['id_category'],
+                $clothing['category_id'],
                 $clothing['size'],
                 $clothing['color'],
                 $clothing['type'],

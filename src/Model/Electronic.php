@@ -22,11 +22,11 @@ class Electronic extends Product implements SockableInterface
         protected ?int $quantity = null,
         protected ?DateTime $createdAt = null,
         protected ?DateTime $updatedAt = null,
-        protected ?int $id_category = null,
+        protected ?int $category_id = null,
         protected ?string $brand = null,
         protected ?int $waranty_fee = null
     ) {
-        parent::__construct($id, $name, $photos, $price, $description, $quantity, $createdAt, $updatedAt, $id_category);
+        parent::__construct($id, $name, $photos, $price, $description, $quantity, $createdAt, $updatedAt, $category_id);
     }
 
     /**
@@ -91,7 +91,7 @@ class Electronic extends Product implements SockableInterface
                 $result['quantity'],
                 new DateTime($result['createdAt']),
                 new DateTime($result['updatedAt']),
-                $result['id_category'],
+                $result['category_id'],
                 $result['brand'],
                 $result['waranty_fee']
             );
@@ -120,7 +120,7 @@ class Electronic extends Product implements SockableInterface
                 $electronic['quantity'],
                 new DateTime($electronic['createdAt']),
                 new DateTime($electronic['updatedAt']),
-                $electronic['id_category'],
+                $electronic['category_id'],
                 $electronic['brand'],
                 $electronic['waranty_fee']
             );
