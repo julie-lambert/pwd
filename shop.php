@@ -34,29 +34,30 @@ $allElectronic = $electronic->findAll();
   <h1>MY-LITTLE-MVC-SHOP</h1>
   <h2>Clothing</h2>
   <ul>
-    <?php foreach ($allClothing as $clothing) : 
+    <?php foreach ($allClothing as $clothing) :
       $clothingImages = $clothing->getPhotos();
-      ?>
+      $idProduct = $clothing->getId();
+    ?>
       <li>
-        <h3><?= $clothing->getName() ?></h3>
+        <a href="product.php?id_product=<?= $idProduct,'&product_type=clothing'?>"><?= $clothing->getName() ?></a>
         <p><?= $clothing->getPrice() ?> €</p>
         <p><?= $clothing->getDescription() ?></p>
         <p><?= $clothing->getQuantity() ?></p>
         <p><?= $clothing->getCategory_id() ?></p>
         <img src="<?= $clothingImages[0] ?>" alt="" height=340 width=340>
-        
+
       </li>
     <?php endforeach; ?>
   </ul>
   <h2>Electronic</h2>
   <ul>
-    <?php foreach ($allElectronic as $electronic) : 
+    <?php foreach ($allElectronic as $electronic) :
       $electronicImages = $electronic->getPhotos();
-
+      $idProduct = $electronic->getId();
     ?>
 
       <li>
-        <h3><?= $electronic->getName() ?></h3>
+      <a href="product.php?id_product=<?= $idProduct,'&product_type=electronic'?>"><?= $electronic->getName() ?></a>
         <p><?= $electronic->getPrice() ?> €</p>
         <p><?= $electronic->getDescription() ?></p>
         <p><?= $electronic->getQuantity() ?></p>
@@ -65,6 +66,7 @@ $allElectronic = $electronic->findAll();
       </li>
     <?php endforeach; ?>
   </ul>
+
 
 </body>
 
