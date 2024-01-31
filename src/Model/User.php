@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Model;
+
 use PDO;
 use PDOException;
 use DateTime;
@@ -13,10 +14,10 @@ class User
     private ?string $fullname = null,
     private ?string $email = null,
     private ?string $password = null,
-    private ?string $role = 'ROLE_USER'
+    private ?array $role = []
 
   ) {
-    
+
     // connect to database pdo
     $dbname = 'draft-shop';
     $host = 'localhost';
@@ -28,7 +29,6 @@ class User
     } catch (PDOException $e) {
       echo $e->getMessage();
     }
-  
   }
 
   // Getters and Setters //
@@ -103,7 +103,7 @@ class User
   /**
    * Get the value of role
    */
-  public function getRole()
+  public function getRole(): array
   {
     return $this->role;
   }
@@ -134,14 +134,14 @@ class User
     $this->pdo = $pdo;
     return $this;
   }
-  
+
   // Methods //
   public function findOneById(int $id): ?User
   {
     $sql = "SELECT * FROM user WHERE id = :id";
     $stmt = $this->pdo->prepare($sql);
     $stmt->execute(['id' => $id]);
-    $result= $stmt->fetch(PDO::FETCH_ASSOC);
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
     if ($result === false) {
       return null;
     } else {
@@ -174,7 +174,7 @@ class User
   }
 
   //REGISTER FUNCTION
-  public function create() : User|bool
+  public function create(): User|bool
   {
     $sql = "INSERT INTO user (fullname, email, password, role) VALUES (:fullname, :email, :password, :role)";
     $stmt = $this->pdo->prepare($sql);
@@ -182,7 +182,7 @@ class User
       'fullname' => $this->fullname,
       'email' => $this->email,
       'password' => $this->password,
-      'role' => $this->role
+      'role' => json_encode($this->role)
     ]);
     $count = $stmt->rowCount();
     if ($count > 0) {
@@ -193,7 +193,7 @@ class User
   }
 
   //UPDATE FUNCTION
-  public function update() : User|bool
+  public function update(): User|bool
   {
     $sql = "UPDATE user SET fullname = :fullname, email = :email, password = :password, role = :role WHERE id = :id";
     $stmt = $this->pdo->prepare($sql);
@@ -212,10 +212,22 @@ class User
     }
   }
 
-  
-
+  public function findOneByEmail($email): User|false
+  {
+    $sql = "SELECT * FROM user WHERE email = :email";
+    $stmt = $this->pdo->prepare($sql);
+    $stmt->execute(['email' => $email]);
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    if ($result === false) {
+      return $result;
+    } else {
+      $user = new User();
+      $user->setId($result['id']);
+      $user->setFullname($result['fullname']);
+      $user->setEmail($result['email']);
+      $user->setPassword($result['password']);
+      $user->setRole($result['role']);
+      return $user;
+    }
+  }
 }
-
-
-
-?>

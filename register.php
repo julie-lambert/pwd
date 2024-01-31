@@ -1,5 +1,28 @@
 <?php
+require_once './vendor/autoload.php';
 
+use App\Controller\AuthenticationController;
+
+$auth = new AuthenticationController();
+
+
+
+if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['firstname']) && isset($_POST['lastname']) && isset($_POST['password_confirm'])) {
+  if ($_POST['password'] !== $_POST['password_confirm']) {
+    $result = [
+      'success' => false,
+      'message' => 'Les mots de passe ne correspondent pas'
+    ];
+  } else {
+    $fullname = $_POST['firstname'] . ' ' . $_POST['lastname'];
+    $result = $auth->register($_POST['email'], $_POST['password'], $fullname);
+    if ($result['success']) {
+      // redirection après 2s
+      header('refresh:2;url=./login.php');
+      // header('Location: ./login.php');
+    }
+  }
+}
 
 
 ?>
@@ -17,43 +40,47 @@
 
 <body>
   <div class="register-wrapper">
-    <form action="" method="post">
+    <form action="register.php" method="post">
       <h1>Inscription</h1>
 
       <div class="input-box">
         <div class="input-field">
-          <input type="text" placeholder="Nom" id="firstname" required>
+          <input type="text" placeholder="Prénom" name="firstname" required>
           <i class='bx bxs-user'></i>
         </div>
         <div class="input-field">
-          <input type="text" placeholder="Prénom" id="lastname" required>
+          <input type="text" placeholder="Nom" name="lastname" required>
           <i class='bx bxs-user'></i>
         </div>
       </div>
 
       <div class="input-box">
         <div class="input-field">
-          <input type="text" placeholder="Pseudo" id="username" required>
+          <input type="text" placeholder="Pseudo" name="username">
           <i class='bx bxs-user'></i>
         </div>
         <div class="input-field">
-          <input type="email" placeholder="Email" id="email" required>
+          <input type="email" placeholder="Email" name="email" required>
           <i class='bx bx-envelope'></i>
         </div>
       </div>
 
       <div class="input-box">
         <div class="input-field">
-          <input type="password" placeholder="Mot de passe" id="password" required>
+          <input type="password" placeholder="Mot de passe" name="password" required>
           <i class='bx bx-lock-alt'></i>
         </div>
         <div class="input-field">
-          <input type="password" placeholder="Confirmation du mot de passe" id="password_confirm" required>
+          <input type="password" placeholder="Confirmation du mot de passe" name="password_confirm" required>
           <i class='bx bx-lock-alt'></i>
         </div>
       </div>
 
-      <button type="submit" class="register-btn">S'inscrire</button>
+      <input type="submit" class="register-btn" value="S'inscrire">
+      <?php if (isset($result['message'])) : ?>
+        <p class=<?php $result['success'] ? 'success-message' : 'error-message' ?>><?= $result['message'] ?> </p>
+      <?php endif; ?>
+
       <!-- <p class="register-text">Vous avez déjà un compte? <a href="./login.php">Connectez-vous ici</a></p> -->
     </form>
   </div>
