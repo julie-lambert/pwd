@@ -21,7 +21,10 @@ class AuthenticationController
 
         $user = new User();
         $result = $user->findOneByEmail($email);
+        echo "result";
+
         if ($result) {
+
             return [
                 'success' => false,
                 'message' => 'Cet email est déjà utilisé'

@@ -226,7 +226,7 @@ class User
       $user->setFullname($result['fullname']);
       $user->setEmail($result['email']);
       $user->setPassword($result['password']);
-      $user->setRole($result['role']);
+      $user->setRole(json_decode($result['role']));
       return $user;
     }
   }
