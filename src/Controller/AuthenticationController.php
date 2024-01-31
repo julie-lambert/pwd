@@ -38,4 +38,38 @@ class AuthenticationController
             ];
         }
     }
+
+    public function login($email, $password)
+    {
+        if (isset($email) && isset($password)) {
+            $email = htmlspecialchars($email);
+        } else {
+            return [
+                'success' => false,
+                'message' => 'Veuillez remplir tous les champs'
+            ];
+        }
+
+        $user = new User();
+        $result = $user->findOneByEmail($email);
+        if ($result) {
+            if (password_verify($password, $result->getPassword())) {
+                $_SESSION['user'] = $result;
+                return [
+                    'success' => true,
+                    'message' => 'Vous êtes connecté'
+                ];
+            } else {
+                return [
+                    'success' => false,
+                    'message' => 'Les identifiants fournis ne correspondent à aucun utilisateurs'
+                ];
+            }
+        } else {
+            return [
+                'success' => false,
+                'message' => 'Les identifiants fournis ne correspondent à aucun utilisateurs'
+            ];
+        }
+    }
 }

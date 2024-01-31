@@ -17,10 +17,8 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['firstna
     $fullname = $_POST['firstname'] . ' ' . $_POST['lastname'];
     $result = $auth->register($_POST['email'], $_POST['password'], $fullname);
     if ($result['success']) {
-      // redirection après 2s
       header('refresh:2;url=./login.php');
-      // header('Location: ./login.php');
-    }
+    } 
   }
 }
 
@@ -42,7 +40,6 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['firstna
   <div class="register-wrapper">
     <form action="register.php" method="post">
       <h1>Inscription</h1>
-
       <div class="input-box">
         <div class="input-field">
           <input type="text" placeholder="Prénom" name="firstname" required>
@@ -81,7 +78,7 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['firstna
         <p class=<?php $result['success'] ? 'success-message' : 'error-message' ?>><?= $result['message'] ?> </p>
       <?php endif; ?>
 
-      <!-- <p class="register-text">Vous avez déjà un compte? <a href="./login.php">Connectez-vous ici</a></p> -->
+      <p class="register-text">Vous avez déjà un compte? <a href="./login.php">Connectez-vous ici</a></p>
     </form>
   </div>
 
