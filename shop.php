@@ -1,9 +1,12 @@
 <?php
+session_start();
 
 require_once 'vendor/autoload.php';
 
 use App\Model\Clothing;
 use App\Model\Electronic;
+
+var_dump($_SESSION);
 
 // findAll Clothing
 
@@ -40,7 +43,7 @@ $allElectronic = $electronic->findAll();
       var_dump($clothingImages);
     ?>
       <li>
-        <a href="product.php?id_product=<?= $idProduct,'&product_type=clothing'?>"><?= $clothing->getName() ?></a>
+        <a href="product.php?id_product=<?= $idProduct, '&product_type=clothing' ?>"><?= $clothing->getName() ?></a>
         <p><?= $clothing->getPrice() ?> €</p>
         <p><?= $clothing->getDescription() ?></p>
         <p><?= $clothing->getQuantity() ?></p>
@@ -58,7 +61,7 @@ $allElectronic = $electronic->findAll();
     ?>
 
       <li>
-      <a href="product.php?id_product=<?= $idProduct,'&product_type=electronic'?>"><?= $electronic->getName() ?></a>
+        <a href="product.php?id_product=<?= $idProduct, '&product_type=electronic' ?>"><?= $electronic->getName() ?></a>
         <p><?= $electronic->getPrice() ?> €</p>
         <p><?= $electronic->getDescription() ?></p>
         <p><?= $electronic->getQuantity() ?></p>

@@ -23,7 +23,7 @@ abstract class Product
         protected ?DateTime $updatedAt = null,
         protected ?int $category_id = null
     ) {
-        // construct here
+        
         // connect to database pdo
         $dbname = 'draft-shop';
         $host = 'localhost';

@@ -3,12 +3,12 @@
 namespace App\Model;
 
 use PDO;
-use PDOException;
-use DateTime;
+use App\Abstract\Database;
+
 
 class User
 {
-  protected ?PDO $pdo = null;
+  private ?PDO $pdo = null;
   public function __construct(
     private ?int $id = null,
     private ?string $fullname = null,
@@ -17,21 +17,14 @@ class User
     private ?array $role = []
 
   ) {
-
-    // connect to database pdo
-    $dbname = 'draft-shop';
-    $host = 'localhost';
-    $dbuser = 'root';
-    $password = '';
-
-    try {
-      $this->pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $dbuser, $password);
-    } catch (PDOException $e) {
-      echo $e->getMessage();
-    }
   }
 
   // Getters and Setters //
+  public function getPdo(): \PDO
+  {
+    $this->pdo = $this->pdo ?? (new Database())->connection();
+    return $this->pdo;
+  }
   /**
    * Get the value of id
    */
@@ -117,29 +110,14 @@ class User
     $this->role = $role;
     return $this;
   }
-  /**
-   * Get the value of pdo
-   */
-  public function getPdo()
-  {
-    return $this->pdo;
-  }
-  /**
-   * Set the value of pdo
-   *
-   * @return  self
-   */
-  public function setPdo($pdo)
-  {
-    $this->pdo = $pdo;
-    return $this;
-  }
+  
 
   // Methods //
   public function findOneById(int $id): ?User
   {
     $sql = "SELECT * FROM user WHERE id = :id";
-    $stmt = $this->pdo->prepare($sql);
+    $pdo = $this->getPdo();
+    $stmt = $pdo->prepare($sql);
     $stmt->execute(['id' => $id]);
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     if ($result === false) {
@@ -158,7 +136,8 @@ class User
   public function findAll(): array
   {
     $sql = "SELECT * FROM user";
-    $stmt = $this->pdo->prepare($sql);
+    $pdo = $this->getPdo();
+    $stmt = $pdo->prepare($sql);
     $stmt->execute();
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
     $users = [];
@@ -177,7 +156,8 @@ class User
   public function create(): User|bool
   {
     $sql = "INSERT INTO user (fullname, email, password, role) VALUES (:fullname, :email, :password, :role)";
-    $stmt = $this->pdo->prepare($sql);
+    $pdo = $this->getPdo();
+    $stmt = $pdo->prepare($sql);
     $stmt->execute([
       'fullname' => $this->fullname,
       'email' => $this->email,
@@ -196,7 +176,8 @@ class User
   public function update(): User|bool
   {
     $sql = "UPDATE user SET fullname = :fullname, email = :email, password = :password, role = :role WHERE id = :id";
-    $stmt = $this->pdo->prepare($sql);
+    $pdo = $this->getPdo();
+    $stmt = $pdo->prepare($sql);
     $stmt->execute([
       'fullname' => $this->fullname,
       'email' => $this->email,
@@ -215,7 +196,8 @@ class User
   public function findOneByEmail($email): User|false
   {
     $sql = "SELECT * FROM user WHERE email = :email";
-    $stmt = $this->pdo->prepare($sql);
+    $pdo = $this->getPdo();
+    $stmt = $pdo->prepare($sql);
     $stmt->execute(['email' => $email]);
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     if ($result === false) {
@@ -229,5 +211,15 @@ class User
       $user->setRole(json_decode($result['role']));
       return $user;
     }
+  }
+
+  public function __sleep()
+  {
+    return ['id', 'fullname', 'email', 'password', 'role'];
+  }
+
+  public function __wakeup()
+  {
+    $this->pdo = null;
   }
 }
