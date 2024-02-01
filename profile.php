@@ -13,6 +13,16 @@ if(!$auth->profile()){
     $user = $_SESSION['user'];
 }
 
+if(isset($_POST['info'])){
+    $result = $auth->update($_POST['fullname'], $_POST['email'], $_POST['password']);
+
+}
+if(isset($_POST['password'])){
+    $result = $auth->updatePassword($_POST['oldPassword'], $_POST['newPassword'], $_POST['confirmPassword']);
+
+}
+
+var_dump($_SESSION);
 ?>
 
 <!DOCTYPE html>
@@ -39,11 +49,24 @@ if(!$auth->profile()){
     <?php endif; ?>
     <?php if(isset($user)): ?>
         <form action="profile.php" method="post">
+            <h3>Modifier mes informations</h3>
             <input type="text" name="fullname" placeholder="Nom complet" value="<?= $user->getFullname() ?>">
             <input type="email" name="email" placeholder="Email" value="<?= $user->getEmail() ?>">
             <input type="password" name="password" placeholder="Mot de passe">
-            <input type="password" name="password_confirm" placeholder="Confirmer le mot de passe">
-            <input type="submit" value="Modifier">
+            <input type="submit" name = "info" value="Modifier">
+            <?php if (isset($result['messageInfo'])) : ?>
+                <p class=<?php $result['success'] ? 'success-message' : 'error-message' ?>><?= $result['messageInfo'] ?> </p>
+            <?php endif; ?>
+        </form>
+        <form action="profile.php" method="post">
+            <h3>Modifier mon mot de passe</h3>
+            <input type="password" name="oldPassword" placeholder="Ancien mot de passe">
+            <input type="password" name="newPassword" placeholder="Nouveau mot de passe">
+            <input type="password" name="confirmPassword" placeholder="Confirmer le mot de passe">
+            <input type="submit" name = "password" value="Modifier">
+            <?php if (isset($result['message'])) : ?>
+                <p class=<?php $result['success'] ? 'success-message' : 'error-message' ?>><?= $result['message'] ?> </p>
+            <?php endif; ?>
         </form>
 
 
