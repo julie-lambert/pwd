@@ -40,7 +40,12 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
           <i class='bx bx-lock-alt'></i>
         </div>
       </div>
-      <input type="submit" class="login-btn" value="Connexion"></input>
+      <input type="submit" class="login-btn" value="Connexion">
+      <?php if (isset($result['message'])) : ?>
+        <p class=<?php $result['success'] ? 'success-message' : 'error-message' ?>><?= $result['message'] ?> </p>
+      <?php endif; ?>
+
+      <p class="register-text">Vous n'avez pas encore de compte? <a href="./register.php">Inscrivez-vous ici</a></p>
     </form>
   </div>
 
