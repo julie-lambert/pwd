@@ -2,14 +2,14 @@
 
 namespace App\Model;
 
-use App\Abstract\Product;
+use App\Abstract\AbstractProduct;
 use App\Interface\SockableInterface;
+use App\Abstract\Database;
 use PDO;
 use DateTime;
 
-class Clothing extends Product implements SockableInterface
+class Clothing extends AbstractProduct implements SockableInterface
 {
-    protected ?PDO $pdo;
     // size, color, type, material_fee
     public function __construct(
         protected ?int $id = null,
@@ -24,10 +24,43 @@ class Clothing extends Product implements SockableInterface
         protected ?string $size = null,
         protected ?string $color = null,
         protected ?string $type = null,
-        protected ?int $material_fee = null
+        protected ?int $material_fee = null,
+        protected ?PDO $pdo = null,
     ) {
         parent::__construct($id, $name, $photos, $price, $description, $quantity, $createdAt, $updatedAt, $category_id);
     }
+
+        /**
+     * Get the value of pdo
+     */
+    public function getPdo()
+    {
+        $this->pdo = $this->pdo ?? (new Database())->connection();
+        return $this->pdo;
+    }
+
+    public function sleep(){
+        return[
+            'id',
+            'name' ,
+            'photos' ,
+            'price',
+            'description',
+            'quantity',
+            'createdAt',
+            'updatedAt' ,
+            'category_id',
+            'size',
+            'color',
+            'type',
+            'material_fee'
+        ];
+     }
+ 
+     public function wakeUp(){
+         $this->pdo = null;
+     
+     }
 
     /**
      * Get the value of size
@@ -92,7 +125,8 @@ class Clothing extends Product implements SockableInterface
     // ////////////////////////
     public function findOneById(int $id): Clothing|bool
     {
-        $query = $this->pdo->prepare(
+        $pdo = $this->getPdo();
+        $query = $pdo->prepare(
             "SELECT * FROM clothing INNER JOIN product ON clothing.id_product = product.id WHERE id_product = :id"
         );
         $query->execute([
