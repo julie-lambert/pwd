@@ -4,6 +4,7 @@ require_once './vendor/autoload.php';
 
 use App\Controller\AuthenticationController;
 
+
 $auth = new AuthenticationController();
 
 if (isset($_POST['email']) && isset($_POST['password'])) {

@@ -74,4 +74,18 @@ class AuthenticationController
             ];
         }
     }
+
+    public function profile(){
+        if(!isset($_SESSION['user'])){
+            return false;
+            
+        }else{
+            return true ;
+        }
+    }
+
+    public function logout(){
+        session_destroy();
+        header('Location: ./login.php');
+    }
 }
