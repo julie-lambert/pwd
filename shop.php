@@ -9,7 +9,7 @@ use App\Controller\ShopController;
 
 $shop = new ShopController();
 
-if(isset($_GET['page'])){
+if (isset($_GET['page'])) {
   $page = $_GET['page'];
 } else {
   $page = 1;
@@ -34,22 +34,35 @@ $allProducts = $shop->index($page);
 
 <body>
   <h1>MY-LITTLE-MVC-SHOP</h1>
-  
+
   <h2>Produits</h2>
 
   <div class="products">
-    <?php if($page > 1): ?>
+    <?php if ($page > 1) : ?>
       <a href="shop.php?page=<?= $page - 1 ?>">Page précédente</a>
     <?php endif; ?>
+    <?php
+    if ($allProducts != empty([])) {
+      $message = "Il n'y a plus de produits";
+    } else { ?>
       <a href="shop.php?page=<?= $page + 1 ?>">Page suivante</a>
+    <?php
+    }
+    if (isset($message)) { ?>
+      <h2><?= $message ?></h2>
+    <?php
+    }
+    ?>
 
-    <?php foreach ($allProducts as $product) : 
+
+
+    <?php foreach ($allProducts as $product) :
       $type = $shop->productType($product->getId());
-      ?>
+    ?>
       <div class="product">
         <h3><?= $product->getName() ?></h3>
-        <img src="<?= $product->getPhotos()[0] ?>" alt="">
-        <p><?=  $product->getPrice() ?> €</p>
+        <img src="<?= $product->getPhotos()[0] ?>" width=450 height=450 alt="">
+        <p><?= $product->getPrice() ?> €</p>
         <p><?= $product->getDescription() ?></p>
         <p><?= $product->getQuantity() ?></p>
         <a href="product.php?id_product=<?= $product->getId(), '&product_type=', $type ?>">Voir le produit</a>
