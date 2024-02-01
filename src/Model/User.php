@@ -110,7 +110,7 @@ class User
     $this->role = $role;
     return $this;
   }
-  
+
 
   // Methods //
   public function findOneById(int $id): ?User
@@ -182,7 +182,7 @@ class User
       'fullname' => $this->fullname,
       'email' => $this->email,
       'password' => $this->password,
-      'role' => $this->role,
+      'role' => json_encode($this->role),
       'id' => $this->id
     ]);
     $count = $stmt->rowCount();

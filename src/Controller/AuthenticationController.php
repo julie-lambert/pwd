@@ -75,12 +75,12 @@ class AuthenticationController
         }
     }
 
-    public function profile(){
-        if(!isset($_SESSION['user'])){
+    public function profile()
+    {
+        if (!isset($_SESSION['user'])) {
             return false;
-            
-        }else{
-            return true ;
+        } else {
+            return true;
         }
     }
 
@@ -97,18 +97,9 @@ class AuthenticationController
         }
 
         $user = new User($_SESSION['user']->getId(), $_SESSION['user']->getFullname(), $_SESSION['user']->getEmail(), $_SESSION['user']->getPassword(), $_SESSION['user']->getRole());
-        $result = $user->findOneByEmail($email);
 
-        if ($result) {
-
-            return [
-                'success' => false,
-                'messageInfo' => 'Cet email est déjà utilisé'
-            ];
-        } else {
-
+        if ($email === $_SESSION['user']->getEmail()) {
             if (password_verify($password, $_SESSION['user']->getPassword())) {
-                $user->setEmail($email);
                 $user->setFullname($fullname);
                 $user->update();
                 $_SESSION['user'] = $user;
@@ -117,10 +108,36 @@ class AuthenticationController
                     'messageInfo' => 'Votre compte a bien été modifié'
                 ];
             } else {
+
                 return [
                     'success' => false,
-                    'messageInfo' => 'Les identifiants fournis ne correspondent à aucun utilisateurs'
+                    'messageInfo' => 'Les identifiants fournis ne correspondent à aucun utilisateurs bonjours'
                 ];
+            }
+        } else {
+            $result = $user->findOneByEmail($email);
+            if ($result) {
+                return [
+                    'success' => false,
+                    'messageInfo' => 'Cet email est déjà utilisé'
+                ];
+            } else {
+
+                if (password_verify($password, $_SESSION['user']->getPassword())) {
+                    $user->setEmail($email);
+                    $user->setFullname($fullname);
+                    $user->update();
+                    $_SESSION['user'] = $user;
+                    return [
+                        'success' => true,
+                        'messageInfo' => 'Votre compte a bien été modifié'
+                    ];
+                } else {
+                    return [
+                        'success' => false,
+                        'messageInfo' => 'Les identifiants fournis ne correspondent à aucun utilisateurs ici'
+                    ];
+                }
             }
         }
     }
@@ -128,7 +145,6 @@ class AuthenticationController
     public function updatePassword($old, $new, $confirmNew)
     {
         if (isset($old) && isset($new) && isset($confirmNew)) {
-     
         } else {
             return [
                 'success' => false,
@@ -158,10 +174,10 @@ class AuthenticationController
                 'message' => 'Les identifiants fournis ne correspondent à aucun utilisateurs'
             ];
         }
-
     }
 
-    public function logout(){
+    public function logout()
+    {
         session_destroy();
         header('Location: ./login.php');
     }
