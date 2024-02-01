@@ -5,20 +5,19 @@ session_start();
 
 use App\Model\Clothing;
 use App\Model\Electronic;
+use App\Controller\ShopController;
 
-var_dump($_SESSION);
+$shop = new ShopController();
 
-// findAll Clothing
+if(isset($_GET['page'])){
+  $page = $_GET['page'];
+} else {
+  $page = 1;
+}
 
-$clothing = new Clothing();
-$allClothing = $clothing->findAll();
+$allProducts = $shop->index($page);
 
 
-
-// findAll Electronic
-
-$electronic = new Electronic();
-$allElectronic = $electronic->findAll();
 
 
 
@@ -35,41 +34,28 @@ $allElectronic = $electronic->findAll();
 
 <body>
   <h1>MY-LITTLE-MVC-SHOP</h1>
-  <h2>Clothing</h2>
-  <ul>
-    <?php foreach ($allClothing as $clothing) :
-      $clothingImages = $clothing->getPhotos();
-      $idProduct = $clothing->getId();
-      var_dump($clothingImages);
-    ?>
-      <li>
-        <a href="product.php?id_product=<?= $idProduct, '&product_type=clothing' ?>"><?= $clothing->getName() ?></a>
-        <p><?= $clothing->getPrice() ?> €</p>
-        <p><?= $clothing->getDescription() ?></p>
-        <p><?= $clothing->getQuantity() ?></p>
-        <p><?= $clothing->getCategory_id() ?></p>
-        <img src="<?= $clothingImages[0] ?>" alt="" height=340 width=340>
+  
+  <h2>Produits</h2>
 
-      </li>
-    <?php endforeach; ?>
-  </ul>
-  <h2>Electronic</h2>
-  <ul>
-    <?php foreach ($allElectronic as $electronic) :
-      $electronicImages = $electronic->getPhotos();
-      $idProduct = $electronic->getId();
-    ?>
+  <div class="products">
+    <?php if($page > 1): ?>
+      <a href="shop.php?page=<?= $page - 1 ?>">Page précédente</a>
+    <?php endif; ?>
+      <a href="shop.php?page=<?= $page + 1 ?>">Page suivante</a>
 
-      <li>
-        <a href="product.php?id_product=<?= $idProduct, '&product_type=electronic' ?>"><?= $electronic->getName() ?></a>
-        <p><?= $electronic->getPrice() ?> €</p>
-        <p><?= $electronic->getDescription() ?></p>
-        <p><?= $electronic->getQuantity() ?></p>
-        <p><?= $electronic->getCategory_id() ?></p>
-        <img src="<?= $electronicImages[0] ?>" alt="" height=340 width=340>
-      </li>
+    <?php foreach ($allProducts as $product) : 
+      $type = $shop->productType($product->getId());
+      ?>
+      <div class="product">
+        <h3><?= $product->getName() ?></h3>
+        <img src="<?= $product->getPhotos()[0] ?>" alt="">
+        <p><?=  $product->getPrice() ?> €</p>
+        <p><?= $product->getDescription() ?></p>
+        <p><?= $product->getQuantity() ?></p>
+        <a href="product.php?id_product=<?= $product->getId(), '&product_type=', $type ?>">Voir le produit</a>
+      </div>
     <?php endforeach; ?>
-  </ul>
+  </div>
 
 
 </body>
