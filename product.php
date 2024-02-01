@@ -4,6 +4,7 @@ require_once 'vendor/autoload.php';
 
 use App\Model\Clothing;
 use App\Model\Electronic;
+use App\Model\Product;
 
 //Si la clé id_product existe dans l'url et que sa valeur est un int
 if (isset($_GET['id_product']) && ctype_digit($_GET['id_product'])) {
@@ -14,11 +15,14 @@ if (isset($_GET['id_product']) && ctype_digit($_GET['id_product'])) {
     $product = new Clothing();
   } elseif ($_GET['product_type'] === 'electronic') {
     $product = new Electronic();
+  } else {
+    $product = new Product();
+    $horsType= "Ce produit est hors catégorie";
   }
 }
 
-//On récupere le produit avec le findOneById de la classe Product
 $finalProduct = $product->findOneById($idProduct);
+//On récupere le produit avec le findOneById de la classe Product
 ?>
 
 <!DOCTYPE html>
@@ -32,6 +36,9 @@ $finalProduct = $product->findOneById($idProduct);
 </head>
 <body>
   <h1><?= $finalProduct->getName() ?></h1>
+  <?php if(isset($horsType)): ?>
+    <h3><?= $horsType ?></h3>
+  <?php endif; ?>
   <p><?= $finalProduct->getPrice() ?> €</p>
   <p><?= $finalProduct->getDescription() ?></p>
   <p><?= $finalProduct->getQuantity() ?></p>
