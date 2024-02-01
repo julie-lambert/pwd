@@ -2,15 +2,15 @@
 
 namespace App\Model;
 
-use App\Abstract\Product;
+use App\Abstract\AbstractProduct;
 use App\Interface\SockableInterface;
+use App\Abstract\Database;
 use PDO;
 use DateTime;
 
 
-class Electronic extends Product implements SockableInterface
+class Electronic extends AbstractProduct implements SockableInterface
 {
-    protected ?PDO $pdo;
 
     // size, color, type, material_fee
     public function __construct(
@@ -24,9 +24,41 @@ class Electronic extends Product implements SockableInterface
         protected ?DateTime $updatedAt = null,
         protected ?int $category_id = null,
         protected ?string $brand = null,
-        protected ?int $waranty_fee = null
+        protected ?int $waranty_fee = null,
+        protected ?PDO $pdo = null,
     ) {
         parent::__construct($id, $name, $photos, $price, $description, $quantity, $createdAt, $updatedAt, $category_id);
+    }
+
+    /**
+     * Get the value of pdo
+     */
+    public function getPdo()
+    {
+        $this->pdo = $this->pdo ?? (new Database())->connection();
+        return $this->pdo;
+    }
+
+    public function sleep()
+    {
+        return [
+            'id',
+            'name',
+            'photos',
+            'price',
+            'description',
+            'quantity',
+            'createdAt',
+            'updatedAt',
+            'category_id',
+            'brand',
+            'waranty_fee'
+        ];
+    }
+
+    public function wakeUp()
+    {
+        $this->pdo = null;
     }
 
     /**
@@ -74,7 +106,8 @@ class Electronic extends Product implements SockableInterface
 
     public function findOneById(int $id): Electronic|bool
     {
-        $query = $this->pdo->prepare(
+        $pdo = $this->getPdo();
+        $query = $pdo->prepare(
             "SELECT * FROM electronic INNER JOIN product ON electronic.id_product = product.id WHERE id_product = :id"
         );
         $query->execute([
