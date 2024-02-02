@@ -1,11 +1,23 @@
 <?php
-
 require_once 'vendor/autoload.php';
 session_start();
 
 use App\Controller\ShopController;
 
+
 $finalProduct = (new ShopController())->showProduct($_GET['id_product'], $_GET['product_type']);
+
+var_dump($_SESSION);
+if (isset($_SESSION['user'])) {
+  $user = $_SESSION['user'];
+  $user_id = $user->getId();
+}
+
+if (isset($_POST['addCart'])) {
+  $quantity = $_POST['quantity'];
+  $product_id = $_GET['id_product'];
+  (new ShopController())->addProductToCart($product_id, $quantity, $user_id);
+}
 ?>
 
 <!DOCTYPE html>
@@ -39,7 +51,8 @@ $finalProduct = (new ShopController())->showProduct($_GET['id_product'], $_GET['
     <input type="number" min="1" value="1" name="quantity">
     <input name="addCart" type="submit" value="Ajouter au Panier">
   </form>
-  
+
+
 </body>
 
 

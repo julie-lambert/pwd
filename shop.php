@@ -10,7 +10,7 @@ use App\Controller\ShopController;
 $shop = new ShopController();
 
 if (isset($_GET['page'])) {
-  $page = $_GET['page'];
+  $page = intval($_GET['page']);
 } else {
   $page = 1;
 }

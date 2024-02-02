@@ -8,7 +8,8 @@ use App\Model\Electronic;
 use App\Controller\AuthenticationController;
 use App\Model\Cart;
 use App\Model\ProductCart;
-use DateTime;
+
+
 
 class ShopController
 {
@@ -58,38 +59,61 @@ class ShopController
         }
     }
 
-    public function addProductToCart($product_id, $quantity): void
+    public function addProductToCart($product_id, $quantity, $user_id): void
     {
         $auth = new AuthenticationController();
         if ($auth->profile()) {
-            $userId = $_SESSION['user']->getId();
+            $userId = $user_id;
             $productModel = new Product();
-            $product =$productModel->findOneById($product_id);
-            $cart = new Cart(); 
-           if($cart->findOneByUserId(user_id: $userId) == false){
+            $product = $productModel->findOneById($product_id);
+            $cart = new Cart();
+            if ($cart->findOneByUserId(user_id: $userId) == false) {
                 $cart->setTotal($product->getPrice() * $quantity);
                 $cart->setUser_id($userId);
-                $cart->setCreated_at(new DateTime());
-                $cart->setUpdated_at(null);
                 $cart->createCart();
-            
+
                 // On ajoute le produit au panier
                 $productCart = new ProductCart();
                 $productCart->setQuantity($quantity);
                 $productCart->setProduct_id($product_id);
                 $productCart->setCart_id($cart->getId());
-                $productCart->setCreated_at(new DateTime());
-                $productCart->setUpdated_at(null);
                 $productCart->createProductCart();
 
                 $cart->setTotal($product->getPrice() * $quantity);
-                $cart->setUpdated_at(new DateTime());
                 $cart->updateCart();
+                $_SESSION["cart"] = $cart;
+                $_SESSION["productCart"][] = $productCart;
+            } else {
 
-            } 
+                //Si on a deja un panier existant on vérifie si le produit est deja dans le panier
+                $foundProduct = null;
+                foreach ($_SESSION["productCart"] as $productCart) {
+                    if ($productCart->getProduct_id() == $product_id) {
+                        $foundProduct = $productCart;
+                        break;
+                    }
+                }
+                if ($foundProduct != null) {
+                    $foundProduct->setQuantity($foundProduct->getQuantity() + $quantity);
+                    $foundProduct->updateProductCart();
+                    $cart->setTotal($cart->getTotal() + ($product->getPrice() * $quantity));
+                    $cart->updateCart();
+                    $_SESSION["cart"] = $cart;
+                } else {
 
-            
-
+                    //Si le produit n'est pas dans le panier on l'ajoute
+                    $productCart = new ProductCart();
+                    $productCart->setQuantity($quantity);
+                    $productCart->setProduct_id($product_id);
+                    $productCart->setCart_id($_SESSION["cart"]->getId());
+                    $productCart->createProductCart();
+                    $cart = $_SESSION["cart"];
+                    $cart->setTotal($cart->getTotal() + ($product->getPrice() * $quantity));
+                    $cart->updateCart();
+                    $_SESSION["cart"] = $cart;
+                    $_SESSION["productCart"][] = $productCart;
+                }
+            }
         } else {
             header("Location: ./login.php");
         }

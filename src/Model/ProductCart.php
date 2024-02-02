@@ -2,7 +2,7 @@
 
 namespace App\Model;
 
-use DateTime;
+
 use PDO;
 use App\Abstract\Database;
 
@@ -13,8 +13,6 @@ class ProductCart
     private ?int $quantity = null,
     private ?int $product_id = null,
     private ?int $cart_id = null,
-    private ?DateTime $created_at = null,
-    private ?DateTime $updated_at = null,
     private ?PDO $pdo = null
 
   ) {
@@ -100,45 +98,8 @@ class ProductCart
     return $this;
   }
 
-  /**
-   * Get the value of created_at
-   */
-  public function getCreated_at()
-  {
-    return $this->created_at;
-  }
 
-  /**
-   * Set the value of created_at
-   *
-   * @return  self
-   */
-  public function setCreated_at($created_at)
-  {
-    $this->created_at = $created_at;
-
-    return $this;
-  }
-
-  /**
-   * Get the value of updated_at
-   */
-  public function getUpdated_at()
-  {
-    return $this->updated_at;
-  }
-
-  /**
-   * Set the value of updated_at
-   *
-   * @return  self
-   */
-  public function setUpdated_at($updated_at)
-  {
-    $this->updated_at = $updated_at;
-
-    return $this;
-  }
+ 
 
   /**
    * Get the value of pdo
@@ -146,11 +107,12 @@ class ProductCart
   public function getPdo()
   {
     $this->pdo = $this->pdo ?? (new Database())->connection();
+    return $this->pdo;
   }
 
   public function __sleep()
   {
-    return ['id', 'quantity', 'product_id', 'cart_id', 'created_at', 'updated_at'];
+    return ['id', 'quantity', 'product_id', 'cart_id'];
   }
 
   public function __wakeup()
@@ -172,13 +134,24 @@ class ProductCart
   public function createProductCart(): static
   {
     $this->getPdo();
-    $query = $this->pdo->prepare("INSERT INTO product_cart (product_id, quantity, cart_id, created_at) VALUES (:product_id, :quantity, :cart_id, NOW())");
+    $query = $this->pdo->prepare("INSERT INTO product_cart (product_id, quantity, cart_id) VALUES (:product_id, :quantity, :cart_id)");
     $query->execute([
       'product_id' => $this->product_id,
       'quantity' => $this->quantity,
       'cart_id' => $this->cart_id
     ]);
     $this->id = $this->pdo->lastInsertId();
+    return $this;
+  }
+
+  public function updateProductCart(): static
+  {
+    $this->getPdo();
+    $query = $this->pdo->prepare("UPDATE product_cart SET quantity = :quantity WHERE id = :id");
+    $query->execute([
+      'quantity' => $this->quantity,
+      'id' => $this->id
+    ]);
     return $this;
   }
 }

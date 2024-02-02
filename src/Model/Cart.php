@@ -3,7 +3,7 @@
 namespace App\Model;
 
 use App\Abstract\Database;
-use DateTime;
+
 use PDO;
 
 class Cart
@@ -12,8 +12,6 @@ class Cart
     private ?int $id = null,
     private ?int $total = null,
     private ?int $user_id = null,
-    private ?DateTime $created_at = null,
-    private ?DateTime $updated_at = null,
     private ?PDO $pdo = null
   ) {
   }
@@ -79,56 +77,17 @@ class Cart
   }
 
   /**
-   * Get the value of created_at
-   */
-  public function getCreated_at()
-  {
-    return $this->created_at;
-  }
-
-  /**
-   * Set the value of created_at
-   *
-   * @return  self
-   */
-  public function setCreated_at($created_at)
-  {
-    $this->created_at = $created_at;
-
-    return $this;
-  }
-
-  /**
-   * Get the value of updated_at
-   */
-  public function getUpdated_at()
-  {
-    return $this->updated_at;
-  }
-
-  /**
-   * Set the value of updated_at
-   *
-   * @return  self
-   */
-  public function setUpdated_at($updated_at)
-  {
-    $this->updated_at = $updated_at;
-
-    return $this;
-  }
-
-  /**
    * Get the value of pdo
    */
   public function getPdo()
   {
     $this->pdo = $this->pdo ?? (new Database())->connection();
+    return $this->pdo;
   }
 
   public function __sleep()
   {
-    return ['id', 'total', 'user_id', 'created_at', 'updated_at'];
+    return ['id', 'total', 'user_id'];
   }
 
   public function __wakeup()
@@ -150,7 +109,7 @@ class Cart
   }
 
   // On récupère un panier par son id utilisateur
-  public function findOneByUserId(int $user_id): static
+  public function findOneByUserId(int $user_id): static|bool
   {
     $this->getPdo();
     $query = $this->pdo->prepare("SELECT * FROM cart WHERE user_id = :user_id");
@@ -163,8 +122,6 @@ class Cart
     $current_cart->setId($cart['id']);
     $current_cart->setTotal($cart['total']);
     $current_cart->setUser_id($cart['user_id']);
-    $current_cart->setCreated_at(new DateTime($cart['created_at']));
-    $current_cart->setUpdated_at(new DateTime($cart['updated_at']));
     return $current_cart;
   }
 
@@ -172,7 +129,7 @@ class Cart
   public function updateCart(): void
   {
     $this->getPdo();
-    $query = $this->pdo->prepare("UPDATE cart SET total = :total, updated_at = NOW() WHERE id = :id");
+    $query = $this->pdo->prepare("UPDATE cart SET total = :total WHERE id = :id");
     $query->execute([
       'total' => $this->total,
       'id' => $this->id
