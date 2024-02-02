@@ -27,13 +27,19 @@ $finalProduct = (new ShopController())->showProduct($_GET['id_product'], $_GET['
       <p><?= $finalProduct->getPrice() ?> €</p>
       <p><?= $finalProduct->getQuantity() ?></p>
       <?php foreach ($finalProduct->getPhotos() as $photo) : ?>
-        <img src="<?= $photo ?>" alt="photo de <?= $finalProduct->getName() ?>">
+        <img width=450 height=450 src="<?= $photo ?>" alt="photo de <?= $finalProduct->getName() ?>">
       <?php endforeach; ?>
     <?php endif; ?>
   <?php else : ?>
     <h2>Le produit demandé n'est pas disponible</h2>
   <?php endif; ?>
 
+  <!-- Formulaire ajout de produits -->
+  <form action="" method="post">
+    <input type="number" min="1" value="1" name="quantity">
+    <input name="addCart" type="submit" value="Ajouter au Panier">
+  </form>
+  
 </body>
 
 
