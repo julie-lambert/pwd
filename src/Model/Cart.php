@@ -135,4 +135,12 @@ class Cart
       'id' => $this->id
     ]);
   }
+
+  // On supprime un panier
+  public function deleteCart($user_id): bool
+  {
+    $this->getPdo();
+    $query = $this->pdo->prepare("DELETE FROM cart WHERE user_id = :user_id");
+    return $query->execute(['user_id' => $user_id]);
+  }
 }

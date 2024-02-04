@@ -180,4 +180,31 @@ class ShopController
         }
         return $result;
     }
+
+    public function validateCart($user_id): array
+    {
+        $result = [];
+        $cartModel = new Cart();
+        $cartModelResult = $cartModel->findOneByUserId($user_id);
+        if ($cartModelResult) {
+            $cartId = $cartModelResult->getId();
+            $productCartModel = new ProductCart();
+            $productCarts = $productCartModel->deleteProductCartByCartId($cartId);
+            if ($productCarts) {
+                $cart = $cartModel->deleteCart($user_id);
+                if ($cart) {
+                    $result = ["success" => true, "message" => "Le panier a bien été validé"];
+                    unset($_SESSION["cart"]);
+                    unset($_SESSION["productCart"]);
+                } else {
+                    $result = ["success" => false, "message" => "Une erreur est survenue lors de la validation du panier"];
+                }
+            } else {
+                $result = ["success" => false, "message" => "Une erreur est survenue lors de la validation du panier"];
+            }
+        } else {
+            $result = ["success" => false, "message" => "Le panier n'existe pas"];
+        }
+        return $result;
+    }
 }

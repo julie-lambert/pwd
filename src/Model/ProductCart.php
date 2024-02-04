@@ -204,4 +204,13 @@ class ProductCart
     }
     return $productsCart;
   }
+
+  public function deleteProductCartByCartId($cart_id): bool
+  {
+    $this->getPdo();
+    $query = $this->pdo->prepare("DELETE FROM product_cart WHERE cart_id = :cart_id");
+    return $query->execute([
+      'cart_id' => $cart_id
+    ]);
+  }
 }
