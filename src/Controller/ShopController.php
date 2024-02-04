@@ -59,7 +59,7 @@ class ShopController
         }
     }
 
-    public function addProductToCart($product_id, $quantity, $user_id): void
+    public function addProductToCart($product_id, $quantity, $user_id): array
     {
         $auth = new AuthenticationController();
         if ($auth->profile()) {
@@ -83,6 +83,7 @@ class ShopController
                 $cart->updateCart();
                 $_SESSION["cart"] = $cart;
                 $_SESSION["productCart"][] = $productCart;
+                $result = ["success" => true, "message" => "Le produit a bien été ajouté au panier"];
             } else {
 
                 //Si on a deja un panier existant on vérifie si le produit est deja dans le panier
@@ -99,6 +100,7 @@ class ShopController
                     $cart->setTotal($cart->getTotal() + ($product->getPrice() * $quantity));
                     $cart->updateCart();
                     $_SESSION["cart"] = $cart;
+                    $result = ["success" => true, "message" => "La quantité du produit a bien été modifiée"];
                 } else {
 
                     //Si le produit n'est pas dans le panier on l'ajoute
@@ -112,10 +114,13 @@ class ShopController
                     $cart->updateCart();
                     $_SESSION["cart"] = $cart;
                     $_SESSION["productCart"][] = $productCart;
+                    $result = ["success" => true, "message" => "Le produit a bien été ajouté au panier"];
                 }
             }
         } else {
-            header("Location: ./login.php");
+            $result = ["success" => false, "message" => "Vous devez être connecté pour ajouter un produit au panier"];
+            // header("Location: ./login.php");
         }
+        return $result;
     }
 }

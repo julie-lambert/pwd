@@ -7,7 +7,6 @@ use App\Controller\ShopController;
 
 $finalProduct = (new ShopController())->showProduct($_GET['id_product'], $_GET['product_type']);
 
-var_dump($_SESSION);
 if (isset($_SESSION['user'])) {
   $user = $_SESSION['user'];
   $user_id = $user->getId();
@@ -16,7 +15,15 @@ if (isset($_SESSION['user'])) {
 if (isset($_POST['addCart'])) {
   $quantity = $_POST['quantity'];
   $product_id = $_GET['id_product'];
-  (new ShopController())->addProductToCart($product_id, $quantity, $user_id);
+  // (new ShopController())->addProductToCart($product_id, $quantity, $user_id);
+  $result = (new ShopController())->addProductToCart($product_id, $quantity, $user_id);
+  if ($result['success']) {
+    $message = $result['message'];
+    header("refresh:3; url=./shop.php");
+  } elseif (!$result['success']) {
+    $error = $result['message'];
+    header("refresh:3; url=./login.php");
+  }
 }
 ?>
 
@@ -35,6 +42,7 @@ if (isset($_POST['addCart'])) {
       <h2><?= $finalProduct ?>, vous allez être redirigé</h2>
     <?php else : ?>
       <h1><?= $finalProduct->getName() ?></h1>
+
       <p><?= $finalProduct->getDescription() ?></p>
       <p><?= $finalProduct->getPrice() ?> €</p>
       <p><?= $finalProduct->getQuantity() ?></p>
@@ -48,6 +56,13 @@ if (isset($_POST['addCart'])) {
 
   <!-- Formulaire ajout de produits -->
   <form action="" method="post">
+    <h3>Ajouter au panier</h3>
+    <?php if (isset($message)) : ?>
+      <p class="success"><?= $message ?></p>
+    <?php elseif (isset($error)) : ?>
+      <p class="error"><?= $error ?></p>
+    <?php endif; ?>
+
     <input type="number" min="1" value="1" name="quantity">
     <input name="addCart" type="submit" value="Ajouter au Panier">
   </form>
