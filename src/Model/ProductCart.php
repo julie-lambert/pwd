@@ -99,7 +99,7 @@ class ProductCart
   }
 
 
- 
+
 
   /**
    * Get the value of pdo
@@ -118,6 +118,27 @@ class ProductCart
   public function __wakeup()
   {
     $this->pdo = null;
+  }
+
+  public function findOneById($product_id, $cart_id): static|false
+  {
+    $this->getPdo();
+    $query = $this->pdo->prepare("SELECT * FROM product_cart WHERE product_id = :product_id AND cart_id = :cart_id");
+    $query->execute([
+      'product_id' => $product_id,
+      'cart_id' => $cart_id
+    ]);
+    $result = $query->fetch(PDO::FETCH_ASSOC);
+    if ($result) {
+      $productCart = new ProductCart();
+      $productCart->setId($result['id']);
+      $productCart->setQuantity($result['quantity']);
+      $productCart->setProduct_id($result['product_id']);
+      $productCart->setCart_id($result['cart_id']);
+      return $productCart;
+    } else {
+      return false;
+    }
   }
 
   public function addProductToCart($product_id, $quantity): void
@@ -153,5 +174,34 @@ class ProductCart
       'id' => $this->id
     ]);
     return $this;
+  }
+
+  public function deleteProductCart($idProduct): bool
+  {
+    $this->getPdo();
+    $query = $this->pdo->prepare("DELETE FROM product_cart WHERE product_id = :product_id");
+    return $query->execute([
+      'product_id' => $idProduct
+    ]);
+  }
+
+  public function findAllByCartId($cart_id): array
+  {
+    $this->getPdo();
+    $query = $this->pdo->prepare("SELECT * FROM product_cart WHERE cart_id = :cart_id");
+    $query->execute([
+      'cart_id' => $cart_id
+    ]);
+    $result = $query->fetchAll(PDO::FETCH_ASSOC);
+    $productsCart = [];
+    foreach ($result as $product) {
+      $productCart = new ProductCart();
+      $productCart->setId($product['id']);
+      $productCart->setQuantity($product['quantity']);
+      $productCart->setProduct_id($product['product_id']);
+      $productCart->setCart_id($product['cart_id']);
+      $productsCart[] = $productCart;
+    }
+    return $productsCart;
   }
 }

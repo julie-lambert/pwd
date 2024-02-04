@@ -37,7 +37,7 @@ class ShopController
         }
     }
 
-    public function showProduct($id_product, $productType): object|string
+    public function showProduct($id_product, $productType = null): object|string
     {
         $auth = new AuthenticationController();
         if ($auth->profile()) {
@@ -120,6 +120,63 @@ class ShopController
         } else {
             $result = ["success" => false, "message" => "Vous devez être connecté pour ajouter un produit au panier"];
             // header("Location: ./login.php");
+        }
+        return $result;
+    }
+
+    public function deleteProductCart($idProduct): array
+    {
+        $result = [];
+        $productCartModel = new ProductCart();
+        $productCart = $productCartModel->findOneById($idProduct, $_SESSION["cart"]->getId());
+
+        if ($productCart) {
+            if ($productCart->deleteProductCart($idProduct)) {
+                $cart = $_SESSION["cart"];
+                $productDetails = $this->showProduct($idProduct);
+                $cart->setTotal($cart->getTotal() - ($productCart->getQuantity() * $productDetails->getPrice()));
+                $cart->updateCart();
+                $_SESSION["cart"] = $cart;
+                unset($_SESSION["productCart"]);
+                // récupération des produits du panier
+                foreach ($productCartModel->findAllByCartId($_SESSION["cart"]->getId()) as $productCart) {
+                    $_SESSION["productCart"][] = $productCart;
+                }
+                $result = ["success" => true, "message" => "Le produit a bien été supprimé du panier"];
+            } else {
+                $result = ["success" => false, "message" => "Une erreur est survenue lors de la suppression du produit"];
+            }
+        } else {
+            $result = ["success" => false, "message" => "Le produit n'existe pas dans le panier"];
+        }
+        return $result;
+    }
+
+    public function updateProductCart($idProduct, $quantity): array
+    {
+        $result = [];
+        $productCartModel = new ProductCart();
+        $productCart = $productCartModel->findOneById($idProduct, $_SESSION["cart"]->getId());
+        if ($productCart) {
+            $oldQuantity = $productCart->getQuantity();
+            $productCart->setQuantity($quantity);
+            if ($productCart->updateProductCart()) {
+                $cart = $_SESSION["cart"];
+                $productDetails = $this->showProduct($idProduct);
+                $cart->setTotal($cart->getTotal() - ($oldQuantity * $productDetails->getPrice()) + ($quantity * $productDetails->getPrice()));
+                $cart->updateCart();
+                $_SESSION["cart"] = $cart;
+                unset($_SESSION["productCart"]);
+                // récupération des produits du panier
+                foreach ($productCartModel->findAllByCartId($_SESSION["cart"]->getId()) as $productCart) {
+                    $_SESSION["productCart"][] = $productCart;
+                }
+                $result = ["success" => true, "message" => "La quantité du produit a bien été modifiée"];
+            } else {
+                $result = ["success" => false, "message" => "Une erreur est survenue lors de la modification de la quantité"];
+            }
+        } else {
+            $result = ["success" => false, "message" => "Le produit n'existe pas dans le panier"];
         }
         return $result;
     }

@@ -12,10 +12,13 @@ if (isset($_SESSION['user'])) {
   $user_id = $user->getId();
 }
 
+if (isset($_SESSION['cart'])) {
+  var_dump($_SESSION['cart']);
+}
+
 if (isset($_POST['addCart'])) {
   $quantity = $_POST['quantity'];
   $product_id = $_GET['id_product'];
-  // (new ShopController())->addProductToCart($product_id, $quantity, $user_id);
   $result = (new ShopController())->addProductToCart($product_id, $quantity, $user_id);
   if ($result['success']) {
     $message = $result['message'];
