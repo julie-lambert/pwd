@@ -12,10 +12,6 @@ if (isset($_SESSION['user'])) {
   $user_id = $user->getId();
 }
 
-if (isset($_SESSION['cart'])) {
-  var_dump($_SESSION['cart']);
-}
-
 if (isset($_POST['addCart'])) {
   $quantity = $_POST['quantity'];
   $product_id = $_GET['id_product'];

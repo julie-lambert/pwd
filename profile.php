@@ -22,7 +22,6 @@ if (isset($_POST['modifPassword'])) {
     $user = $_SESSION['user'];
 }
 
-var_dump($_SESSION);
 ?>
 
 <!DOCTYPE html>

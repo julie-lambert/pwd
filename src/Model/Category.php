@@ -4,7 +4,7 @@ namespace App\Model;
 
 use PDO;
 use DateTime;
-use App\Abstract\Product;
+use App\Model\Product as ModelProduct;
 
 class Category
 {
@@ -155,7 +155,7 @@ class Category
         };
         foreach ($result as $product) {
             //on crée un objet Product
-            $product = new Product($product['id'], $product['name'], json_decode($product['photos']), $product['price'], $product['description'], $product['quantity'], new DateTime($product['createdAt']), new DateTime($product['updatedAt']), $product['category_id']);
+            $product = new ModelProduct($product['id'], $product['name'], json_decode($product['photos']), $product['price'], $product['description'], $product['quantity'], new DateTime($product['createdAt']), new DateTime($product['updatedAt']), $product['category_id']);
             //on ajoute l'objet au tableau
             $products[] = $product;
         }
