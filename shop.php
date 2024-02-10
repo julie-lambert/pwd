@@ -2,7 +2,6 @@
 require_once 'vendor/autoload.php';
 session_start();
 
-
 use App\Model\Clothing;
 use App\Model\Electronic;
 use App\Controller\ShopController;
@@ -17,10 +16,6 @@ if (isset($_GET['page'])) {
 
 $allProducts = $shop->index($page);
 
-
-
-
-
 ?>
 
 <!DOCTYPE html>
@@ -30,45 +25,47 @@ $allProducts = $shop->index($page);
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MY-LITTLE-MVC-SHOP</title>
+  <link rel="stylesheet" href="./assets/css/shop.css">
 </head>
 
 <body>
-  <h1>MY-LITTLE-MVC-SHOP</h1>
+  <div class="container">
+    <div class="title">Liste de Produits</div>
+    <div class="product-list">
 
-  <h2>Produits</h2>
+      <!-- Liste des produits -->
+      <?php foreach ($allProducts as $product) :
+        $type = $shop->productType($product->getId());
+      ?>
+        <a href="product.php?id_product=<?= $product->getId(), '&product_type=', $type ?>" class="product">
+          <img src="<?= $product->getPhotos()[0] ?>" alt="">
+          <h2><?= $product->getName() ?></h2>
+          <div class="price"><?= $product->getPrice() ?> €</div>
 
-  <div class="products">
-    <?php if ($page > 1) : ?>
-      <a href="shop.php?page=<?= $page - 1 ?>">Page précédente</a>
-    <?php endif; ?>
-    <?php
-    if ($allProducts != empty([])) {
-      $message = "Il n'y a plus de produits";
-    } else { ?>
-      <a href="shop.php?page=<?= $page + 1 ?>">Page suivante</a>
-    <?php
-    }
-    if (isset($message)) { ?>
-      <h2><?= $message ?></h2>
-    <?php
-    }
-    ?>
+          <!-- <p><?= $product->getDescription() ?></p>
+          <p><?= $product->getQuantity() ?></p> -->
 
-
-
-    <?php foreach ($allProducts as $product) :
-      $type = $shop->productType($product->getId());
-    ?>
-      <div class="product">
-        <h3><?= $product->getName() ?></h3>
-        <img src="<?= $product->getPhotos()[0] ?>" width=450 height=450 alt="">
-        <p><?= $product->getPrice() ?> €</p>
-        <p><?= $product->getDescription() ?></p>
-        <p><?= $product->getQuantity() ?></p>
-        <a href="product.php?id_product=<?= $product->getId(), '&product_type=', $type ?>">Voir le produit</a>
-      </div>
-    <?php endforeach; ?>
+        </a>
+      <?php endforeach; ?>
+      <!-- Pagination -->
+      <?php if ($page > 1) : ?>
+        <a href="shop.php?page=<?= $page - 1 ?>">Page précédente</a>
+      <?php endif; ?>
+      <?php
+      if ($allProducts != empty([])) {
+        $message = "Il n'y a plus de produits";
+      } else { ?>
+        <a href="shop.php?page=<?= $page + 1 ?>">Page suivante</a>
+      <?php
+      }
+      if (isset($message)) { ?>
+        <h2><?= $message ?></h2>
+      <?php
+      }
+      ?>
+    </div>
   </div>
+
 
 
 </body>

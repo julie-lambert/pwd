@@ -32,7 +32,7 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['firstna
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Register</title>
-  <link rel="stylesheet" href="./style/css/register.css">
+  <link rel="stylesheet" href="./assets/css/register.css">
   <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 

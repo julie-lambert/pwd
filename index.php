@@ -1,3 +1,8 @@
+<?php
+//Redirection vers la page shop.php
+header("Location: ./shop.php");
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 

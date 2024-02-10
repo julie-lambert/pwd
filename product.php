@@ -33,38 +33,70 @@ if (isset($_POST['addCart'])) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Produit</title>
+  <link rel="stylesheet" href="./assets/css/product.css">
+
 </head>
 
 <body>
+  <!-- HEADER -->
+  <header class="product-header">
+    <a href="shop.php">Retour à la boutique</a>
+    <h1>DÉTAILS DU PRODUIT</h1>
+    <div class="user-head">
+      <a href="cart.php">Voir mon panier</a>
+      <?php if (isset($_SESSION['user'])) : ?>
+        <a href="profile.php">Mon profil</a>
+        <a href="logout.php">Se déconnecter</a>
+      <?php else : ?>
+        <a href="login.php">Se connecter</a>
+    </div>
+  <?php endif; ?>
+  </header>
+
+
   <?php if ($finalProduct) : ?>
     <?php if ($finalProduct == "Vous devez être connecté pour accéder à cette page") : ?>
       <h2><?= $finalProduct ?>, vous allez être redirigé</h2>
     <?php else : ?>
-      <h1><?= $finalProduct->getName() ?></h1>
+      <main>
+        <section data-model="00">
+          <div class="card">
+            <h2><small><?= $finalProduct->getName() ?></small></h2>
+            <hr />
+            <p><?= $finalProduct->getDescription() ?></p>
+            <hr />
+            <p><?= $finalProduct->getPrice() ?> €</p>
+            <hr />
+            <p><?= $finalProduct->getQuantity() ?></p>
+            <hr />
+            <div class="photos">
+              <?php foreach ($finalProduct->getPhotos() as $photo) : ?>
+                <img class="active" src="<?= $photo ?>" alt="photo de <?= $finalProduct->getName() ?>">
+              <?php endforeach; ?>
+            <?php endif; ?>
+          <?php else : ?>
+            <h2>Le produit demandé n'est pas disponible</h2>
+          <?php endif; ?>
+            </div>
+          </div>
 
-      <p><?= $finalProduct->getDescription() ?></p>
-      <p><?= $finalProduct->getPrice() ?> €</p>
-      <p><?= $finalProduct->getQuantity() ?></p>
-      <?php foreach ($finalProduct->getPhotos() as $photo) : ?>
-        <img width=450 height=450 src="<?= $photo ?>" alt="photo de <?= $finalProduct->getName() ?>">
-      <?php endforeach; ?>
-    <?php endif; ?>
-  <?php else : ?>
-    <h2>Le produit demandé n'est pas disponible</h2>
-  <?php endif; ?>
+        </section>
 
-  <!-- Formulaire ajout de produits -->
-  <form action="" method="post">
-    <h3>Ajouter au panier</h3>
-    <?php if (isset($message)) : ?>
-      <p class="success"><?= $message ?></p>
-    <?php elseif (isset($error)) : ?>
-      <p class="error"><?= $error ?></p>
-    <?php endif; ?>
+      </main>
 
-    <input type="number" min="1" value="1" name="quantity">
-    <input name="addCart" type="submit" value="Ajouter au Panier">
-  </form>
+      <!-- Formulaire ajout de produits -->
+      <form action="" method="post">
+        <h3>Ajouter au panier</h3>
+        <?php if (isset($message)) : ?>
+          <p class="success"><?= $message ?></p>
+        <?php elseif (isset($error)) : ?>
+          <p class="error"><?= $error ?></p>
+        <?php endif; ?>
+
+        <input type="number" min="1" value="1" name="quantity">
+        <input name="addCart" type="submit" value="Ajouter au Panier">
+
+      </form>
 
 
 </body>

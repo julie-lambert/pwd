@@ -1,0 +1,98 @@
+/* Font Settings */
+@font-face {
+  font-family: "NeueMontreal";
+  src: url("../fonts/NeueMontreal-Regular.otf");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "NeueMontreal";
+  src: url("../fonts/NeueMontreal-Bold.otf");
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "NeueMontreal";
+  src: url("../fonts/NeueMontreal-Black.otf");
+  font-weight: 900;
+  font-style: normal;
+}
+
+/* Reset CSS */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "NeueMontreal", sans-serif;
+  line-height: 1.4;
+  font-size: 14px;
+  font-weight: 400;
+  background-color: #eaedee;
+  min-height: 100vh;
+}
+
+.product-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 2rem;
+  color: #1a1a1a;
+  text-transform: uppercase;
+}
+
+.product-header .user-head a {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+}
+
+.product-header h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+main {
+  padding: 2rem 0;
+  position: relative;
+}
+
+.card {
+  background-color: #fff;
+  padding: 2rem;
+  margin: 2rem 2rem 0;
+  border-radius: 0.5rem;
+}
+
+.card h2 {
+  font-size: 3rem;
+}
+
+.card h2 small {
+  font-size: 65%;
+  margin-left: 1rem;
+}
+
+/* MEDIAQUERIES */
+/* For laptops */
+@media (min-width: 1024px) {
+  .product-header {
+    position: fixed;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    top: 0;
+    left: 0;
+    z-index: 10;
+  }
+  main {
+    padding: 0.2rem;
+  }
+}
+
+/* For Tablets */
+/* For phones */
