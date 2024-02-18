@@ -38,4 +38,21 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     }
   });
+
+  const activeSection = () => {
+    sections.forEach(section => {
+      if (section.getBoundingClientRect().y > -100 && section.getBoundingClientRect().y < 100) {
+        section.classList.add("active");
+      } else {
+        section.classList.remove("active");
+      }
+    })
+  }
+
+  if (window.innerWidth >= 1024) {
+    activeSection();
+    main.addEventListener("scroll", activeSection);
+  }
 });
+
+
