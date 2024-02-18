@@ -33,6 +33,7 @@ if (isset($_POST['addCart'])) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Produit</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
   <link rel="stylesheet" href="./assets/css/product.css">
 
 </head>
@@ -60,18 +61,54 @@ if (isset($_POST['addCart'])) {
     <?php else : ?>
       <main>
         <section data-model="00">
+          <!-- CAROUSEL -->
+          <div class="carousel">
+            <div class="swiper">
+              <div class="swiper-wrapper">
+              <?php foreach ($finalProduct->getPhotos() as $photo) : ?>
+                  <div class="swiper-slide">
+                    <img src="<?= $photo ?>" alt="photo de <?= $finalProduct->getName() ?>">
+                  </div>
+                <?php endforeach; ?>
+              </div>
+            </div>
+            <div class="swiper-controls">
+              <div class="swiper-pagination"></div>
+              <div class="button-swiper-nav button-left"><span>
+                </span>
+              </div>
+              <div class="button-swiper-nav button-right"><span></span></div>
+            </div>
+          </div>
           <div class="card">
             <h2><small><?= $finalProduct->getName() ?></small></h2>
             <hr />
             <p><?= $finalProduct->getDescription() ?></p>
             <hr />
-            <p><?= $finalProduct->getPrice() ?> €</p>
-            <hr />
-            <p><?= $finalProduct->getQuantity() ?></p>
+            <div class="price-quantity">
+              <p><?= $finalProduct->getPrice() ?> €</p>
+              <!-- Formulaire ajout de produits -->
+              <form action="" method="post">
+                <h3>Ajouter au panier</h3>
+                <?php if (isset($message)) : ?>
+                  <p class="success"><?= $message ?></p>
+                <?php elseif (isset($error)) : ?>
+                  <p class="error"><?= $error ?></p>
+                <?php endif; ?>
+
+                <input type="number" min="1" value="1" name="quantity">
+                <input name="addCart" type="submit" value="Ajouter au Panier">
+
+              </form>
+            </div>
+
+
             <hr />
             <div class="photos">
               <?php foreach ($finalProduct->getPhotos() as $photo) : ?>
-                <img class="active" src="<?= $photo ?>" alt="photo de <?= $finalProduct->getName() ?>">
+                <div class="active">
+                  <img src="<?= $photo ?>" alt="photo de <?= $finalProduct->getName() ?>">
+                </div>
               <?php endforeach; ?>
             <?php endif; ?>
           <?php else : ?>
@@ -84,20 +121,8 @@ if (isset($_POST['addCart'])) {
 
       </main>
 
-      <!-- Formulaire ajout de produits -->
-      <form action="" method="post">
-        <h3>Ajouter au panier</h3>
-        <?php if (isset($message)) : ?>
-          <p class="success"><?= $message ?></p>
-        <?php elseif (isset($error)) : ?>
-          <p class="error"><?= $error ?></p>
-        <?php endif; ?>
-
-        <input type="number" min="1" value="1" name="quantity">
-        <input name="addCart" type="submit" value="Ajouter au Panier">
-
-      </form>
-
+      <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+      <script src="./scripts/productScript.js"></script>
 
 </body>
 
