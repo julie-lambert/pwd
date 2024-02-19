@@ -6,7 +6,7 @@
   font-family: "Poppins", sans-serif;
 }
 
-body {
+body::before {
   display: flex;
   justify-content: center;
   align-items: center;

@@ -29,6 +29,9 @@ $allProducts = $shop->index($page);
 </head>
 
 <body>
+  <?php
+  require_once "header.php";
+  ?>
   <div class="container">
     <div class="title">Liste de Produits</div>
     <div class="product-list">

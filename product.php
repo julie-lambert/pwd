@@ -39,8 +39,14 @@ if (isset($_POST['addCart'])) {
 </head>
 
 <body>
+
   <!-- HEADER -->
-  <header class="product-header">
+  <?php 
+  require_once "header.php";
+  ?>
+  
+  
+  <!-- <header class="product-header">
     <a href="shop.php">Retour à la boutique</a>
     <h1>DÉTAILS DU PRODUIT</h1>
     <div class="user-head">
@@ -52,7 +58,7 @@ if (isset($_POST['addCart'])) {
         <a href="login.php">Se connecter</a>
     </div>
   <?php endif; ?>
-  </header>
+  </header> -->
 
 
   <?php if ($finalProduct) : ?>

@@ -44,30 +44,6 @@ body {
   background: var(--bg-color);
 }
 
-nav {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  padding: 1em;
-  z-index: 100;
-}
-
-nav div {
-  display: flex;
-  padding: 1em;
-  gap: 10em;
-}
-
-nav div a {
-  text-decoration: none;
-  color: var(--black);
-  font-family: "NeueMontreal";
-  font-weight: 700;
-  cursor: pointer;
-}
-
 .header {
   width: 100%;
   display: flex;
@@ -118,7 +94,7 @@ img {
   display: flex;
   justify-content: flex-end;
   align-items: flex-end;
-  z-index: 10000;
+  z-index: 10;
   color: #bcbcc4;
   padding: 0.2em 0.4em;
   font-size: 20vw;

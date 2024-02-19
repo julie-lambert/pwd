@@ -37,6 +37,9 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['firstna
 </head>
 
 <body>
+<?php 
+    require_once "header.php";
+  ?>
   <div class="register-wrapper">
     <form action="register.php" method="post">
       <h1>Inscription</h1>

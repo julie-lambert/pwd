@@ -27,6 +27,9 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
 </head>
 
 <body>
+<?php 
+    require_once "header.php";
+  ?>
 
   <div class="login-wrapper">
     <form action="login.php" method="post">

@@ -1,5 +1,4 @@
-<?php
-?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -7,23 +6,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Header</title>
+  <title>Accueil</title>
   <link rel="stylesheet" href="./assets/css/index.css">
 </head>
 
 <body>
-  <div class="container">
-    <nav>
-      <div>
-        <a href="/index.php">Home</a>
-        <a href="/shop.php">Shop</a>
-      </div>
-      <div>
-        <a href="/profile.php">Profil</a>
-        <a href="/register.php">Inscription/Connexion</a>
-      </div>
-    </nav>
-  </div> 
+  <?php 
+    require_once "header.php";
+  ?>
+ 
   <h1 class="counter">
     0
   </h1>
