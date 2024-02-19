@@ -51,6 +51,7 @@ nav {
   display: flex;
   justify-content: space-between;
   padding: 1em;
+  z-index: 100;
 }
 
 nav div {
@@ -64,6 +65,7 @@ nav div a {
   color: var(--black);
   font-family: "NeueMontreal";
   font-weight: 700;
+  cursor: pointer;
 }
 
 .header {
