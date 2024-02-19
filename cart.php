@@ -29,13 +29,17 @@ if (isset($_POST['update'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./assets/css/cart.css">
     <title>Cart</title>
 </head>
 
 <body>
+    <?php
+    require_once "header.php";
+    ?>
 
 
-    <main>
+    <main class="cart-container">
         <h1>Panier</h1>
         <?php if (!isset($_SESSION['cart']) || empty($_SESSION['cart'])) : ?>
             <h2>Votre panier est vide</h2>

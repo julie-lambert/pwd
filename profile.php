@@ -31,9 +31,14 @@ if (isset($_POST['modifPassword'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile</title>
+    <link rel="stylesheet" href="./assets/css/profile.css">
 </head>
 
 <body>
+    <?php
+    require_once "header.php";
+    ?>
+    <div class="profil-container">
     <?php if (isset($message)) : ?>
         <p><?= $message ?></p>
     <?php else : ?>
@@ -75,6 +80,7 @@ if (isset($_POST['modifPassword'])) {
 
 
     <?php endif; ?>
+    </div>
 
 
 </body>
