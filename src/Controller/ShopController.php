@@ -67,7 +67,8 @@ class ShopController
             $productModel = new Product();
             $product = $productModel->findOneById($product_id);
             $cart = new Cart();
-            if ($cart->findOneByUserId(user_id: $userId) == false) {
+            $request = $cart->findOneByUserId($userId);
+            if ($request == false) {
                 $cart->setTotal($product->getPrice() * $quantity);
                 $cart->setUser_id($userId);
                 $cart->createCart();
@@ -85,6 +86,15 @@ class ShopController
                 $_SESSION["productCart"][] = $productCart;
                 $result = ["success" => true, "message" => "Le produit a bien été ajouté au panier"];
             } else {
+
+                //On récupère les produits du panier pour les mettre dans la session
+                $_SESSION["cart"] = $request;
+                $productCartModel = new ProductCart();
+                $productCarts = $productCartModel->findAllByCartId($request->getId());
+                $_SESSION["productCart"] = [];
+                foreach ($productCarts as $productCart) {
+                    $_SESSION["productCart"][] = $productCart;
+                }
 
                 //Si on a deja un panier existant on vérifie si le produit est deja dans le panier
                 $foundProduct = null;
