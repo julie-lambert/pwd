@@ -35,7 +35,6 @@ if (isset($_POST['addCart'])) {
   <title>Produit</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
   <link rel="stylesheet" href="./assets/css/product.css">
-
 </head>
 
 <body>
@@ -65,7 +64,7 @@ if (isset($_POST['addCart'])) {
           <div class="carousel">
             <div class="swiper">
               <div class="swiper-wrapper">
-              <?php foreach ($finalProduct->getPhotos() as $photo) : ?>
+                <?php foreach ($finalProduct->getPhotos() as $photo) : ?>
                   <div class="swiper-slide">
                     <img src="<?= $photo ?>" alt="photo de <?= $finalProduct->getName() ?>">
                   </div>
