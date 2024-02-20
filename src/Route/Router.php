@@ -1,43 +1,57 @@
 <?php
  
 namespace App\Route;
-use Exception;
-use Closure;
+
 
 class Router
 {
-    protected $routes = [];
+    private $url;
+    private $routes = [];
 
-
-    public function addRoute(string $method, string $url, closure $target)
+    public function __construct($url)
     {
-        $this->routes[$method][$url] = $target;
-  
+        $this->url = $url;
     }
 
 
-    public function matchRoute(){
+    public function get($path, $callback)
+    {
+        $route = new Route($path, $callback);
+        $this->routes['GET'][] = $route;
+    }
 
-        $method = $_SERVER['REQUEST_METHOD'];
-        $url = $_SERVER['REQUEST_URI'];
 
-        if(isset($this->routes[$method])){
+    public function post($path, $callback)
+    {
+        $route = new Route($path, $callback);
+        $this->routes['POST'][] = $route;
+    }
 
-            foreach($this->routes[$method] as $routeUrl => $target){
-               
-                //simple string comparison to see if the route url matches the request url
-                if($routeUrl === $url){
-                    call_user_func($target);
-                }
-            }
+    public function run()
+    {
+        if(!isset($this->routes[$_SERVER['REQUEST_METHOD']])){
+            throw new RouterException('REQUEST_METHOD does not exist');
         }
-        throw new Exception('Route not found');
+        foreach($this->routes[$_SERVER['REQUEST_METHOD']] as $route){
+            if($route->match($this->url)){
+                return $route->call();
+            }
+
+        }
+
+        throw new RouterException('No routes matches');
     }
 
+    public function getUrl()
+    {
+        return $this->url;
+    }
 
-
-
-
+    public function setUrl($url)
+    {
+        $this->url = $url;
+        return $this;
+    }
 
 
 
