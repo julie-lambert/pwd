@@ -62,8 +62,9 @@ class ShopController
     public function addProductToCart($product_id, $quantity): array
     {
         $auth = new AuthenticationController();
+       
         if ($auth->profile()) {
-            $userId = $_SESSION("user")->getId();
+            $userId = $_SESSION["user"]->getId();
             $productModel = new Product();
             $product = $productModel->findOneById($product_id);
             $cart = new Cart();

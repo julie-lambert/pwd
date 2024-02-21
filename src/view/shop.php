@@ -20,7 +20,7 @@
       <?php foreach ($allProducts as $product) :
         $type = $shop->productType($product->getId());
       ?>
-        <a href="/pwd/product/<?= $product->getId(), '&product_type=', $type ?>" class="product">
+        <a href="/pwd/product/<?= $product->getId(), '?product_type=', $type ?>" class="product">
           <img src="<?= $product->getPhotos()[0] ?>" alt="">
           <h2><?= $product->getName() ?></h2>
           <div class="price"><?= $product->getPrice() ?> €</div>

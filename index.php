@@ -113,7 +113,6 @@ $router->get('/shop', function () {
 $router->get('/product/:id', function ($id) {
     $shop = new ShopController();
     $finalProduct = $shop->showProduct($id, $_GET['product_type']);
-    // var_dump($finalProduct);
     require_once 'src/view/product.php';
 });
 
@@ -123,7 +122,19 @@ $router->get('/product/:id', function ($id) {
 // Route pour ajouter un produit au panier
 $router->post('/product/:id', function ($id) {
     $shop = new ShopController();
+
+
     $result = $shop->addProductToCart($id, $_POST['quantity']);
+    if ($result['success']) {
+        $message = $result['message'];
+        // On redirige l'utilisateur aprés 3 secondes vers le shop en utilisant la variable d'environnement
+        header("refresh:3; url=" . $_ENV['BASE_DIR'] . "/shop");
+    } elseif (!$result['success']) {
+        $error = $result['message'];
+        header("refresh:3; url=" . $_ENV['BASE_DIR'] . "/login.php");
+    }
+
+
     require_once 'src/view/product.php';
 });
 

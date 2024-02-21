@@ -1,27 +1,3 @@
-<?php
-require_once 'vendor/autoload.php';
-
-
-use App\Controller\ShopController;
-
-
-
-
-
-if (isset($_POST['addCart'])) {
-  $quantity = $_POST['quantity'];
-  $product_id = $_GET['id_product'];
-  $result = (new ShopController())->addProductToCart($product_id, $quantity, $user_id);
-  if ($result['success']) {
-    $message = $result['message'];
-    header("refresh:3; url=./shop.php");
-  } elseif (!$result['success']) {
-    $error = $result['message'];
-    header("refresh:3; url=./login.php");
-  }
-}
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
