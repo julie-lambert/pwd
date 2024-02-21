@@ -1,30 +1,3 @@
-<?php
-require_once './vendor/autoload.php';
-
-use App\Controller\AuthenticationController;
-
-$auth = new AuthenticationController();
-
-
-
-if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['firstname']) && isset($_POST['lastname']) && isset($_POST['password_confirm'])) {
-  if ($_POST['password'] !== $_POST['password_confirm']) {
-    $result = [
-      'success' => false,
-      'message' => 'Les mots de passe ne correspondent pas'
-    ];
-  } else {
-    $fullname = $_POST['firstname'] . ' ' . $_POST['lastname'];
-    $result = $auth->register($_POST['email'], $_POST['password'], $fullname);
-    if ($result['success']) {
-      header('refresh:2;url=./login.php');
-    }
-  }
-}
-
-
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -41,7 +14,7 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['firstna
   require_once "header.php";
   ?>
   <div class="register-wrapper">
-    <form action="register.php" method="post">
+    <form method="post">
       <h1>Inscription</h1>
       <div class="input-box">
         <div class="input-field">

@@ -1,20 +1,3 @@
-<?php
-session_start();
-require_once './vendor/autoload.php';
-
-use App\Controller\AuthenticationController;
-
-
-$auth = new AuthenticationController();
-
-if (isset($_POST['email']) && isset($_POST['password'])) {
-  $result = $auth->login($_POST['email'], $_POST['password']);
-  if ($result['success']) {
-    header('refresh:2;url=./shop.php');
-  }
-}
-
-?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -27,12 +10,12 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
 </head>
 
 <body>
-<?php 
-    require_once "header.php";
+  <?php
+  require_once "header.php";
   ?>
 
   <div class="login-wrapper">
-    <form action="login.php" method="post">
+    <form method="post">
       <h1>Connexion</h1>
       <div class="input-box">
         <div class="input-field">

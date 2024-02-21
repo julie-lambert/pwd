@@ -53,6 +53,13 @@ class Router
         return $this;
     }
 
+    public function getRoutes()
+    {
+        return $this->routes;
+    }
+
+    
+
 
 
 

@@ -1,16 +1,10 @@
-<?php
-
-
-?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="./assets/css/header.css">
+  <link rel="stylesheet" href="/pwd/assets/css/header.css">
 </head>
 
 <body>
@@ -27,14 +21,14 @@
         <a href="index.php">Home</a>
       <?php endif
       ?>
-      <a href="shop.php">Shop</a>
+      <a href="/pwd/shop">Shop</a>
     </div>
     <div>
       <?php
       if (isset($_SESSION['user'])) : ?>
-        <a href="profile.php">Profil</a>
+        <a href="/pwd/profile">Profil</a>
         <a href="cart.php">Panier</a>
-        <a href="logout.php">Déconnexion</a>
+        <a href="/pwd/logout">Déconnexion</a>
       <?php else : ?>
         <a href="/pwd/register">Inscription/Connexion</a>
       <?php endif; ?>

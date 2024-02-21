@@ -7,15 +7,25 @@ use App\Model\User;
 class AuthenticationController
 {
 
-    public function register($email, $password, $fullname)
+    public function register($email, $password, $confPassword, $firstname, $lastname)
     {
-        if (isset($email) && isset($password) && isset($fullname)) {
+        if (isset($email) && isset($password) && isset($confPassword) && isset($firstname) && isset($lastname)) {
             $email = htmlspecialchars($email);
-            $fullname = htmlspecialchars($fullname);
+            $firstname = htmlspecialchars($firstname);
+            $lastname = htmlspecialchars($lastname);
+            $fullname = $firstname . ' ' . $lastname;
+
         } else {
             return [
                 'success' => false,
                 'message' => 'Veuillez remplir tous les champs'
+            ];
+        }
+
+        if ($password !== $confPassword) {
+            return [
+                'success' => false,
+                'message' => 'Les mots de passe ne correspondent pas'
             ];
         }
 
@@ -179,6 +189,6 @@ class AuthenticationController
     public function logout()
     {
         session_destroy();
-        header('Location: ./login.php');
+        header('Location: /pwd/login');
     }
 }

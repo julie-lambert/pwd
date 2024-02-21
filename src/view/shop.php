@@ -1,23 +1,3 @@
-<?php
-require_once 'vendor/autoload.php';
-session_start();
-
-use App\Model\Clothing;
-use App\Model\Electronic;
-use App\Controller\ShopController;
-
-$shop = new ShopController();
-
-if (isset($_GET['page'])) {
-  $page = intval($_GET['page']);
-} else {
-  $page = 1;
-}
-
-$allProducts = $shop->index($page);
-
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -40,7 +20,7 @@ $allProducts = $shop->index($page);
       <?php foreach ($allProducts as $product) :
         $type = $shop->productType($product->getId());
       ?>
-        <a href="product.php?id_product=<?= $product->getId(), '&product_type=', $type ?>" class="product">
+        <a href="/pwd/product/<?= $product->getId(), '&product_type=', $type ?>" class="product">
           <img src="<?= $product->getPhotos()[0] ?>" alt="">
           <h2><?= $product->getName() ?></h2>
           <div class="price"><?= $product->getPrice() ?> €</div>
@@ -52,13 +32,13 @@ $allProducts = $shop->index($page);
       <?php endforeach; ?>
       <!-- Pagination -->
       <?php if ($page > 1) : ?>
-        <a href="shop.php?page=<?= $page - 1 ?>">Page précédente</a>
+        <a href="/pwd/shop?page=<?= $page - 1 ?>">Page précédente</a>
       <?php endif; ?>
       <?php
       if ($allProducts != empty([])) {
         $message = "Il n'y a plus de produits";
       } else { ?>
-        <a href="shop.php?page=<?= $page + 1 ?>">Page suivante</a>
+        <a href="/pwd/shop?page=<?= $page + 1 ?>">Page suivante</a>
       <?php
       }
       if (isset($message)) { ?>

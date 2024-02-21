@@ -1,28 +1,3 @@
-<?php
-require_once './vendor/autoload.php';
-session_start();
-
-use App\Controller\AuthenticationController;
-
-$auth = new AuthenticationController();
-
-if (!$auth->profile()) {
-    $message = "Vous n'êtes pas connecté vous allez être redirigé vers la page de connexion";
-    header("refresh:3;url=login.php");
-} else {
-    $user = $_SESSION['user'];
-}
-
-if (isset($_POST['info'])) {
-    $result = $auth->update($_POST['email'], $_POST['password'], $_POST['fullname']);
-    $user = $_SESSION['user'];
-}
-if (isset($_POST['modifPassword'])) {
-    $result = $auth->updatePassword($_POST['oldPassword'], $_POST['newPassword'], $_POST['confirmPassword']);
-    $user = $_SESSION['user'];
-}
-
-?>
 
 <!DOCTYPE html>
 <html lang="en">

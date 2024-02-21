@@ -1,16 +1,12 @@
 <?php
 require_once 'vendor/autoload.php';
-session_start();
+
 
 use App\Controller\ShopController;
 
 
-$finalProduct = (new ShopController())->showProduct($_GET['id_product'], $_GET['product_type']);
 
-if (isset($_SESSION['user'])) {
-  $user = $_SESSION['user'];
-  $user_id = $user->getId();
-}
+
 
 if (isset($_POST['addCart'])) {
   $quantity = $_POST['quantity'];
@@ -34,30 +30,16 @@ if (isset($_POST['addCart'])) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Produit</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-  <link rel="stylesheet" href="./assets/css/product.css">
+  <link rel="stylesheet" href="<?= $_ENV['BASE_DIR'] ?>/assets/css/product.css">
 </head>
 
 <body>
 
   <!-- HEADER -->
-  <?php 
+  <?php
   require_once "header.php";
   ?>
-  
-  
-  <!-- <header class="product-header">
-    <a href="shop.php">Retour à la boutique</a>
-    <h1>DÉTAILS DU PRODUIT</h1>
-    <div class="user-head">
-      <a href="cart.php">Voir mon panier</a>
-      <?php if (isset($_SESSION['user'])) : ?>
-        <a href="profile.php">Mon profil</a>
-        <a href="logout.php">Se déconnecter</a>
-      <?php else : ?>
-        <a href="login.php">Se connecter</a>
-    </div>
-  <?php endif; ?>
-  </header> -->
+
 
 
   <?php if ($finalProduct) : ?>
@@ -127,7 +109,7 @@ if (isset($_POST['addCart'])) {
       </main>
 
       <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-      <script src="./scripts/productScript.js"></script>
+      <script src="<?= $_ENV['BASE_DIR'] ?>/scripts/productScript.js"></script>
 
 </body>
 
