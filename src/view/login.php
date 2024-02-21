@@ -49,7 +49,7 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
         <p class=<?php $result['success'] ? 'success-message' : 'error-message' ?>><?= $result['message'] ?> </p>
       <?php endif; ?>
 
-      <p class="register-text">Vous n'avez pas encore de compte? <a href="./register.php">Inscrivez-vous ici</a></p>
+      <p class="register-text">Vous n'avez pas encore de compte? <a href="/pwd/register">Inscrivez-vous ici</a></p>
     </form>
   </div>
 

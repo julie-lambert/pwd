@@ -12,12 +12,26 @@ $router = new Router($_GET['url']);
 $router->get('/', function () {
     require_once 'src/view/home.php';
 });
-$router->get('/shop', function () {
-    echo 'Hello World';
+
+// Routes pour la Connexion/Inscription
+
+//Connexion
+$router->get('/login', function () {
+    require_once 'src/view/login.php';
+});
+$router->post('/login', function () {
+    echo ('Connexion');
 });
 
-$router->get('/posts/:id', function ($id) {
-    echo 'Affichage du post ' . $id;
+//Inscription
+$router->get('/register', function () {
+    require_once 'src/view/register.php';
 });
+$router->post('/register', function () {
+    echo ('Inscription');
+});
+
+
+
 
 $router->run();

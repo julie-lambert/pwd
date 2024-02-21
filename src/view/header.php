@@ -36,7 +36,7 @@
         <a href="cart.php">Panier</a>
         <a href="logout.php">Déconnexion</a>
       <?php else : ?>
-        <a href="register.php">Inscription/Connexion</a>
+        <a href="/pwd/register">Inscription/Connexion</a>
       <?php endif; ?>
     </div>
   </nav>

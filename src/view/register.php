@@ -18,7 +18,7 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['firstna
     $result = $auth->register($_POST['email'], $_POST['password'], $fullname);
     if ($result['success']) {
       header('refresh:2;url=./login.php');
-    } 
+    }
   }
 }
 
@@ -37,8 +37,8 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['firstna
 </head>
 
 <body>
-<?php 
-    require_once "header.php";
+  <?php
+  require_once "header.php";
   ?>
   <div class="register-wrapper">
     <form action="register.php" method="post">
@@ -81,7 +81,7 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['firstna
         <p class=<?php $result['success'] ? 'success-message' : 'error-message' ?>><?= $result['message'] ?> </p>
       <?php endif; ?>
 
-      <p class="register-text">Vous avez déjà un compte? <a href="./login.php">Connectez-vous ici</a></p>
+      <p class="register-text">Vous avez déjà un compte? <a href="/pwd/login">Connectez-vous ici</a></p>
     </form>
   </div>
 
