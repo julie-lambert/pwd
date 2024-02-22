@@ -1,28 +1,3 @@
-<?php
-require_once 'vendor/autoload.php';
-session_start();
-
-use App\Controller\ShopController;
-
-if (!isset($_SESSION['user'])) {
-    header("Location: ./login.php");
-}
-
-if (isset($_POST['delete'])) {
-    $idProduct = $_POST['id_product'];
-    $shopController = new ShopController();
-    $result = $shopController->deleteProductCart($idProduct);
-}
-
-if (isset($_POST['update'])) {
-    $idProduct = $_POST['id_product'];
-    $quantity = $_POST['quantity'];
-    $shopController = new ShopController();
-    $result = $shopController->updateProductCart($idProduct, $quantity);
-}
-
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -48,11 +23,11 @@ if (isset($_POST['update'])) {
             <?php if (isset($result)) : ?>
                 <?php if ($result['success']) : ?>
                     <h2 class="success"><?= $result['message'] ?></h2>
-                    <?php header("refresh:3; url=./cart.php") ?>
+                    <?php header("refresh:3; url=" . $_ENV['BASE_DIR'] . "/cart") ?>
 
                 <?php elseif (!$result['success']) : ?>
                     <h2 class="error"><?= $result['message'] ?></h2>
-                    <?php header("refresh:3; url=./cart.php") ?>
+                    <?php header("refresh:3; url=" . $_ENV['BASE_DIR'] . "/cart") ?>
                 <?php endif; ?>
             <?php endif; ?>
             <section>
@@ -69,29 +44,26 @@ if (isset($_POST['update'])) {
                     </thead>
                     <tbody>
                         <?php
-                        $total = 0;
-                        $shopController = new ShopController();
-                        foreach ($_SESSION['productCart'] as $product) :
-                            $idProduct = $product->getProduct_id();
-                            $productDetails = $shopController->showProduct($idProduct);
-                            $productName = $productDetails->getName();
-                            $price = $productDetails->getPrice();
-                            $quantity = $product->getQuantity();
-                            $total += $price * $quantity;
+                        foreach ($productsList as $product) :
+                            $productName = $product['productName'];
+                            $idProduct = $product['idProduct'];
+                            $price = $product['price'];
+                            $quantity = $product['quantity'];
+
                         ?>
                             <tr>
                                 <td><?= $productName ?></td>
                                 <td><?= $idProduct ?></td>
                                 <td><?= $price ?> €</td>
                                 <td>
-                                    <form action="" method="post">
+                                    <form method="post">
                                         <input type="number" name="quantity" min="1" value="<?= $quantity ?>">
                                         <input type="hidden" name="id_product" value="<?= $idProduct ?>">
                                         <input type="submit" name="update" value="Modifier">
                                     </form>
                                 </td>
                                 <td>
-                                    <form action="" method="post">
+                                    <form method="post">
                                         <input type="hidden" name="id_product" value="<?= $idProduct ?>">
                                         <input type="submit" name="delete" value="Supprimer">
                                     </form>
@@ -106,10 +78,11 @@ if (isset($_POST['update'])) {
 
                     </tbody>
                 </table>
-                <a href="./checkout.php">Valider le panier</a>
+                <a href="<?= $_ENV['BASE_DIR'] ?>/checkout">Valider le panier</a>
 
             </section>
         <?php endif; ?>
+
 
     </main>
 

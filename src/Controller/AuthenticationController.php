@@ -121,7 +121,7 @@ class AuthenticationController
 
                 return [
                     'success' => false,
-                    'messageInfo' => 'Les identifiants fournis ne correspondent à aucun utilisateurs bonjours'
+                    'messageInfo' => 'Les identifiants fournis ne correspondent à aucun utilisateurs'
                 ];
             }
         } else {

@@ -54,7 +54,7 @@ class ShopController
             }
         } else {
             $message = "Vous devez être connecté pour accéder à cette page";
-            header("refresh:3; url=./login.php");
+            header("refresh:3; url=" . $_ENV["BASE_DIR"] . "/login");
             return $message;
         }
     }
@@ -62,7 +62,7 @@ class ShopController
     public function addProductToCart($product_id, $quantity): array
     {
         $auth = new AuthenticationController();
-       
+
         if ($auth->profile()) {
             $userId = $_SESSION["user"]->getId();
             $productModel = new Product();
@@ -90,6 +90,7 @@ class ShopController
 
                 //On récupère les produits du panier pour les mettre dans la session
                 $_SESSION["cart"] = $request;
+
                 $productCartModel = new ProductCart();
                 $productCarts = $productCartModel->findAllByCartId($request->getId());
                 $_SESSION["productCart"] = [];

@@ -46,6 +46,7 @@ body {
   min-height: 100vh;
 }
 
+
 .product-header {
   display: flex;
   justify-content: space-between;
@@ -104,6 +105,7 @@ main {
   font-size: 1.5rem;
   font-weight: 700;
   color: #1a1a1a;
+  ;
 }
 
 .card .price-quantity form {
@@ -121,7 +123,6 @@ main {
   padding: 2px 2px 2px 15px;
   border-radius: 12px;
   width: 50px;
-  
 }
 
 .card .price-quantity form input[type="submit"] {

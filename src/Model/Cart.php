@@ -118,11 +118,11 @@ class Cart
     if ($cart === false) {
       return false;
     }
-    $current_cart = new Cart();
-    $current_cart->setId($cart['id']);
-    $current_cart->setTotal($cart['total']);
-    $current_cart->setUser_id($cart['user_id']);
-    return $current_cart;
+
+    $this->setId(intval($cart['id']));
+    $this->setTotal($cart['total']);
+    $this->setUser_id($cart['user_id']);
+    return $this;
   }
 
   // On met à jour le panier

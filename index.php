@@ -6,16 +6,14 @@ use App\Route\Router;
 use App\Controller\AuthenticationController;
 use App\Controller\ShopController;
 
+//On créé une variable d'environnement pour le chemin de base du projet (1ère méthode)
 // $_ENV['BASE_DIR'] = '/' . (explode('/', __DIR__))[count(explode('/', __DIR__)) - 1];
 
-//On créé une variable d'environnement pour le chemin de base du projet
+//On créé une variable d'environnement pour le chemin de base du projet (2ème méthode)(la plus mieux)
 $_ENV['BASE_DIR'] = substr($_SERVER['PHP_SELF'], 0, strrpos($_SERVER['PHP_SELF'], '/'));
 
 
-
-
-
-
+//On vérifie si la variable url existe
 
 if (!isset($_GET['url'])) {
     $_GET['url'] = '/';
@@ -47,7 +45,7 @@ $router->post(
 );
 
 
-//Inscription
+//============================> INSCRIPTION
 $router->get('/register', function () {
     require_once 'src/view/register.php';
 });
@@ -60,12 +58,12 @@ $router->post('/register', function () {
     }
 });
 
-//Deconnexion
+//============================> DECONNEXION
 $router->get('/logout', function () {
     require_once './logout.php';
 });
 
-//Profil
+//============================> PROFIL
 $router->get('/profile', function () {
 
     $auth = new AuthenticationController();
@@ -75,7 +73,7 @@ $router->get('/profile', function () {
     } else {
         $user = $_SESSION['user'];
     }
-    var_dump($user);
+
     require_once 'src/view/profile.php';
 });
 $router->post('/profile', function () {
@@ -83,6 +81,7 @@ $router->post('/profile', function () {
 
 
     if (isset($_POST['info'])) {
+
         $result = $auth->update($_POST['email'], $_POST['password'], $_POST['fullname']);
         $user = $_SESSION['user'];
     }
@@ -93,7 +92,7 @@ $router->post('/profile', function () {
     require_once 'src/view/profile.php';
 });
 
-//======================> Shop
+//===========================> SHOP
 
 // Route pour tous les produits + pagination
 $router->get('/shop', function () {
@@ -108,7 +107,8 @@ $router->get('/shop', function () {
 });
 
 
-//========================> Produit
+//==========================> PRODUIT
+
 // Route pour un produit en fonction de son id
 $router->get('/product/:id', function ($id) {
     $shop = new ShopController();
@@ -116,13 +116,11 @@ $router->get('/product/:id', function ($id) {
     require_once 'src/view/product.php';
 });
 
-
-//======================> Panier
-
 // Route pour ajouter un produit au panier
 $router->post('/product/:id', function ($id) {
-    $shop = new ShopController();
 
+    $shop = new ShopController();
+    $finalProduct = $shop->showProduct($id, $_GET['product_type']);
 
     $result = $shop->addProductToCart($id, $_POST['quantity']);
     if ($result['success']) {
@@ -131,38 +129,88 @@ $router->post('/product/:id', function ($id) {
         header("refresh:3; url=" . $_ENV['BASE_DIR'] . "/shop");
     } elseif (!$result['success']) {
         $error = $result['message'];
-        header("refresh:3; url=" . $_ENV['BASE_DIR'] . "/login.php");
+        header("refresh:3; url=" . $_ENV['BASE_DIR'] . "/login");
     }
-
 
     require_once 'src/view/product.php';
 });
 
+//==========================> PANIER
+
+
 // Route pour le panier
 $router->get('/cart', function () {
+    if (!isset($_SESSION['user'])) {
+        header("Location:" . $_ENV['BASE_DIR'] . "/login");
+    }
+    // On récupère les produits du panier avec leurs infos
+    $total = 0;
+    $shopController = new ShopController();
+    $productsList = [];
+    if (isset($_SESSION['cart']) && isset($_SESSION['productCart'])) {
+        foreach ($_SESSION['productCart'] as $product) :
+            $idProduct = $product->getProduct_id();
+            $productDetails = $shopController->showProduct($idProduct);
+            $productName = $productDetails->getName();
+            $price = $productDetails->getPrice();
+            $quantity = $product->getQuantity();
+            $total += $price * $quantity;
+            $productsList[] = [
+                "idProduct" => $idProduct,
+                "productName" => $productName,
+                "price" => $price,
+                "quantity" => $quantity,
+
+            ];
+        endforeach;
+    }
+
+
     require_once 'src/view/cart.php';
 });
 
-// Route pour supprimer un produit du panier
-$router->post('/cart/:id', function ($id) {
-    $shop = new ShopController();
-    $result = $shop->removeProductFromCart($id, $_SESSION['user']->getId());
-    require_once 'src/view/cart.php';
-});
+// Routes pour supprimer un produit du panier ou mettre à jour la quantité d'un produit
+$router->post('/cart', function () {
+    $shopController = new ShopController();
 
-// Route pour vider le panier
-$router->get('/empty-cart', function () {
-    $shop = new ShopController();
-    $result = $shop->emptyCart($_SESSION['user']->getId());
+    $total = 0;
+    $productsList = [];
+    // On récupère les produits du panier avec leurs infos
+    foreach ($_SESSION['productCart'] as $product) :
+        $idProduct = $product->getProduct_id();
+        $productDetails = $shopController->showProduct($idProduct);
+        $productName = $productDetails->getName();
+        $price = $productDetails->getPrice();
+        $quantity = $product->getQuantity();
+        $total += $price * $quantity;
+        $productsList[] = [
+            "idProduct" => $idProduct,
+            "productName" => $productName,
+            "price" => $price,
+            "quantity" => $quantity,
+
+        ];
+    endforeach;
+    // On supprime un produit du panier
+    if (isset($_POST['delete'])) {
+        $idProduct = $_POST['id_product'];
+        $result = $shopController->deleteProductCart($idProduct);
+    }
+    // On met à jour la quantité d'un produit dans le panier
+    if (isset($_POST['update'])) {
+        $idProduct = $_POST['id_product'];
+        $quantity = $_POST['quantity'];
+        $result = $shopController->updateProductCart($idProduct, $quantity);
+    }
     require_once 'src/view/cart.php';
 });
 
 // Route pour valider le panier
-$router->get('/validate-cart', function () {
-    $shop = new ShopController();
-    $result = $shop->validateCart($_SESSION['user']->getId());
-    require_once 'src/view/cart.php';
+$router->get('/checkout', function () {
+    require_once 'src/view/checkout.php';
 });
+
+
 
 
 

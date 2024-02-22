@@ -1,6 +1,6 @@
 <?php
 require_once 'vendor/autoload.php';
-session_start();
+
 
 use App\Controller\ShopController;
 
@@ -38,11 +38,11 @@ if (!isset($_SESSION['user'])) {
         <section>
             <?php if ($cartResult['success']) : ?>
                 <h2 class="success"><?= $cartResult['message'] ?></h2>
-                <?php header("refresh:2; url=./cart.php") ?>
+                <?php header("refresh:2; url=". $_ENV['BASE_DIR'] ."/cart") ?>
 
             <?php elseif (!$cartResult['success']) : ?>
                 <h2 class="error"><?= $cartResult['message'] ?></h2>
-                <?php header("refresh:2; url=./cart.php") ?>
+                <?php header("refresh:2; url=". $_ENV['BASE_DIR'] ."/cart") ?>
             <?php endif; ?>
 
         </section>

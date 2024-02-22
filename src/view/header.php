@@ -16,21 +16,21 @@
       // if product.php est contenu dans $_SERVER['PHP_SELF'] alors on affiche le lien "Retour à la boutique"
 
       if (str_contains($_SERVER['PHP_SELF'], 'product.php')) : ?>
-        <a href="shop.php" class="active">Retour à la boutique</a>
+        <a href="<?= $_ENV['BASE_DIR'] ?>/shop" class="active">Retour à la boutique</a>
       <?php else : ?>
-        <a href="index.php">Home</a>
+        <a href="<?= $_ENV['BASE_DIR'] ?>/">Home</a>
       <?php endif
       ?>
-      <a href="/pwd/shop">Shop</a>
+      <a href="<?= $_ENV['BASE_DIR'] ?>/shop">Shop</a>
     </div>
     <div>
       <?php
       if (isset($_SESSION['user'])) : ?>
-        <a href="/pwd/profile">Profil</a>
-        <a href="cart.php">Panier</a>
-        <a href="/pwd/logout">Déconnexion</a>
+        <a href="<?= $_ENV['BASE_DIR'] ?>/profile">Profil</a>
+        <a href="<?= $_ENV['BASE_DIR'] ?>/cart">Panier</a>
+        <a href="<?= $_ENV['BASE_DIR'] ?>/logout">Déconnexion</a>
       <?php else : ?>
-        <a href="/pwd/register">Inscription/Connexion</a>
+        <a href="<?= $_ENV['BASE_DIR'] ?>/register">Inscription/Connexion</a>
       <?php endif; ?>
     </div>
   </nav>

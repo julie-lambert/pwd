@@ -29,7 +29,7 @@
         <a href="logout.php">Déconnexion</a>
     <?php endif; ?>
     <?php if (isset($user)) : ?>
-        <form action="profile.php" method="post">
+        <form  method="post">
             <h3>Modifier mes informations</h3>
             <input type="text" name="fullname" placeholder="Nom complet" value="<?= $user->getFullname() ?>">
             <input type="email" name="email" placeholder="Email" value="<?= $user->getEmail() ?>">
@@ -39,7 +39,7 @@
                 <p class=<?php $result['success'] ? 'success-message' : 'error-message' ?>><?= $result['messageInfo'] ?> </p>
             <?php endif; ?>
         </form>
-        <form action="profile.php" method="post">
+        <form  method="post">
             <h3>Modifier mon mot de passe</h3>
             <input type="password" name="oldPassword" placeholder="Ancien mot de passe">
             <input type="password" name="newPassword" placeholder="Nouveau mot de passe">
