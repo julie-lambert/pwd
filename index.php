@@ -16,6 +16,7 @@ $_ENV['BASE_DIR'] = substr($_SERVER['PHP_SELF'], 0, strrpos($_SERVER['PHP_SELF']
 //On vérifie si la variable url existe
 
 if (!isset($_GET['url'])) {
+
     $_GET['url'] = '/';
 }
 $router = new Router($_GET['url']);
@@ -209,17 +210,6 @@ $router->post('/cart', function () {
 $router->get('/checkout', function () {
     require_once 'src/view/checkout.php';
 });
-
-
-
-
-
-
-
-
-
-
-
 
 
 
